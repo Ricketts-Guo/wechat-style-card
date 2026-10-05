@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#edf4ee">
+  <title>Chatprint · 微信聊天风格卡</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Chatprint 首页"><span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span><span>chatprint<span class="brand-dot">.</span></span></a>
+      <div class="topbar-actions"><span class="local-badge"><span class="status-dot"></span>统计在本机完成</span><button id="settings-open" class="button subtle"><span aria-hidden="true">⚙</span> Jev 设置 <span id="key-status" class="key-status">未连接</span></button></div>
+    </header>
+
+    <section class="intro">
+      <div class="intro-copy"><p class="eyebrow"><span></span> 每个人，都有自己的聊天节奏</p><h1>从聊天里，读懂<span>表达的样子。</span></h1><p class="intro-description">文字、语音，还是一张恰到好处的表情包？<br>把聊天习惯变成一张有依据、可复核的风格卡。</p></div>
+      <div class="intro-art" aria-hidden="true"><div class="art-grid"></div><div class="bubble bubble-one">收到！我来看看 <i></i></div><div class="bubble bubble-two"><span>♫</span><div class="voice-bars"><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div><small>8″</small></div><div class="bubble bubble-three"><span>☺</span></div><span class="art-label">YOUR WORDS, YOUR RHYTHM</span><div class="art-star">✳</div></div>
+    </section>
+
+    <main class="workspace">
+      <aside class="sidebar">
+        <div class="section-caption"><span>01 / 数据来源</span><span class="tiny-dot"></span></div>
+        <div id="drop-zone" class="drop-zone" tabindex="0" role="button" aria-label="选择或拖入聊天记录文件，最大10MB"><div class="upload-icon" aria-hidden="true">↥</div><strong>放入你的聊天记录</strong><p>拖拽文件，或点击选择</p><span class="file-formats">JSON · JSONL · CSV · ≤10 MB</span></div>
+        <input id="file-input" type="file" accept=".json,.jsonl,.ndjson,.csv,application/json,text/csv" hidden>
+        <button id="demo-load" class="button full secondary">先体验示例 <span aria-hidden="true">↗</span></button>
+        <div id="dataset-source" class="dataset-source" hidden><span class="source-icon" aria-hidden="true">▤</span><div><strong id="source-name">聊天记录</strong><small id="source-count"></small></div><button id="clear-data" class="icon-button" title="清空当前数据" aria-label="清空当前数据">×</button></div>
+        <details class="wechat-section"><summary>从本机微信读取 <span>⌄</span></summary><p id="wechat-status">正在检查本机读取工具…</p><button id="wechat-connect" class="button full secondary" disabled>选择或输入微信会话</button><p class="helper">通过已安装的 CLI 或 Python 适配器，读取当前账号在本机保存并初始化的微信数据。</p></details>
+        <div class="sidebar-divider"></div>
+        <div class="section-caption">02 / 看哪一段聊天</div>
+        <label class="field-label" for="chat-filter">会话范围</label><select id="chat-filter"><option value="">全部会话</option></select>
+        <div class="date-row"><div><label class="field-label" for="date-start">开始日期</label><input id="date-start" type="date"></div><div><label class="field-label" for="date-end">结束日期</label><input id="date-end" type="date"></div></div>
+        <button id="filters-reset" class="text-button">重置筛选</button>
+        <div class="sidebar-note"><span aria-hidden="true">⌁</span><p>标签描述这段样本里的表达习惯。每个判断，都可以回到原文检查。</p></div>
+        <a class="repo-note" href="https://github.com/Ricketts-Guo/wechat-style-card" id="repo-link" target="_blank" rel="noopener">开放源代码 <span>↗</span></a>
+      </aside>
+
+      <div class="main-panel">
+        <div class="panel-heading"><div><p class="eyebrow small">02 / CHAT PORTRAITS</p><h2>聊天风格，一目了然</h2></div><button id="export-report" class="button secondary" disabled><span aria-hidden="true">↓</span> 导出匿名报告</button></div>
+        <div id="notices" class="notices" aria-live="polite"></div>
+        <div class="overview"><div class="stat"><span>消息总数</span><strong id="stat-messages">—</strong><small id="stat-range">等待导入</small></div><div class="stat"><span>参与者</span><strong id="stat-people">—</strong><small>按发送者分别统计</small></div><div class="stat"><span>文本分析覆盖</span><strong id="stat-coverage">—</strong><small id="coverage-note">Jev 按需分析</small></div></div>
+        <section id="empty-state" class="empty-state"><div class="empty-symbol" aria-hidden="true"><span>“</span><span>☺</span><span>♫</span></div><h3>每一段聊天，都有自己的纹理</h3><p>从左边导入记录，或者用一组虚构聊天体验。<br>先看到消息形式偏好，再按需分析文本情绪。</p><button id="empty-demo" class="button primary">看看示例风格卡 <span aria-hidden="true">→</span></button><div class="empty-steps"><span>导入聊天</span><i>→</i><span>查看习惯</span><i>→</i><span>分析与复核</span></div></section>
+        <div id="results" hidden>
+          <div class="people-heading"><span>选择一个人，看 TA 的表达习惯</span><small id="people-count"></small></div>
+          <div id="people-list" class="people-list" role="group" aria-label="选择聊天参与者"></div>
+          <article id="person-card" class="person-card"></article>
+          <section class="analysis-callout"><div><span class="eyebrow small">JEV / 文本情绪</span><h3>再读一层，表达里的情绪</h3><p>预览选中的脱敏文本后，才会发送给 TypeSafe。<br>表情包和语音只统计使用频次。</p></div><button id="analyze-open" class="button primary">选择文本并分析 <span aria-hidden="true">↗</span></button></section>
+          <div id="job-progress" class="job-progress" hidden aria-live="polite"><div class="job-progress-top"><strong id="job-label">正在分析</strong><span id="job-count">0 / 0</span></div><progress id="job-bar" value="0" max="100"></progress><small id="job-detail"></small><button id="job-retry" class="text-button" hidden>重新读取任务进度</button></div>
+        </div>
+        <footer class="workspace-footer"><span>CHATPRINT · 微信聊天风格卡</span><span>有数据的标签，有分寸的解读。</span></footer>
+      </div>
+    </main>
+  </div>
+
+  <dialog id="settings-dialog" class="modal settings-modal"><form id="settings-form"><div class="modal-heading"><div><p class="eyebrow small">连接你的模型</p><h2>Jev 设置</h2></div><button type="button" class="icon-button modal-close" data-close="settings-dialog" aria-label="关闭设置">×</button></div><p class="modal-description">使用你自己的 TypeSafe API Key。每位用户需要自行申请密钥、充值，调用费用由自己的账户承担。</p><div class="settings-status"><span id="settings-dot" class="status-dot"></span><span id="settings-connection">尚未连接</span><small id="settings-model">Jev</small></div><label class="field-label" for="api-key">TypeSafe API Key</label><div class="key-input-wrap"><input id="api-key" type="password" autocomplete="off" spellcheck="false" placeholder="粘贴你的 API Key"><button id="key-show" class="text-button" type="button" aria-label="显示密钥">显示</button></div><p class="helper">密钥只保存在本地服务进程的内存中，重启后清除。不会写入浏览器存储、网址或导出报告。</p><a href="https://typesafe.ai" class="external-link" target="_blank" rel="noopener">前往 TypeSafe 申请和充值 <span>↗</span></a><div class="privacy-box"><strong>哪些内容会发送出去？</strong><p>基础消息统计在本机完成。只有你选择并预览后的文本及必要的相邻上下文，会发送到 TypeSafe 分析；姓名与常见联系方式默认替换。请在预览中检查是否仍有需要去掉的个人信息。</p></div><p id="settings-error" class="inline-error" role="alert" hidden></p><div class="modal-actions"><button id="key-clear" type="button" class="text-button danger" hidden>清除当前密钥</button><button type="button" class="button secondary" data-close="settings-dialog">取消</button><button id="settings-save" type="submit" class="button primary">保存密钥</button></div></form></dialog>
+
+  <dialog id="analysis-dialog" class="modal analysis-modal"><div class="modal-heading"><div><p class="eyebrow small">先预览，再发送</p><h2>选择文本进行分析</h2></div><button class="icon-button modal-close" data-close="analysis-dialog" aria-label="关闭分析预览">×</button></div><p class="modal-description">仅分析当前筛选范围中的文字消息。勾选控制分析目标；取消勾选的文字仍可能出现在其他目标的上下文中，发送范围以每条预览为准。</p><div class="analysis-toolbar"><label for="analysis-limit">本轮最多分析 <select id="analysis-limit"><option value="10">10 条</option><option value="30" selected>30 条</option><option value="50">50 条</option><option value="100">100 条</option><option value="200">200 条</option></select></label><label class="checkbox-label"><input id="skip-analyzed" type="checkbox" checked> 跳过已分析</label></div><div class="preview-header"><label class="checkbox-label"><input id="preview-all" type="checkbox" checked> 全选</label><span id="preview-count"></span><span class="privacy-pill">脱敏预览</span></div><div id="preview-messages" class="preview-messages"></div><div id="preview-warnings" class="preview-warnings"></div><p class="helper">文字判断可能误读反话或语境。分析完成后，可在证据原文里手动修正情绪。</p><p id="analysis-error" class="inline-error" role="alert" hidden></p><div class="modal-actions"><span id="analysis-cost" class="helper"></span><button class="button secondary" data-close="analysis-dialog">取消</button><button id="analysis-send" class="button primary" disabled>确认发送并分析</button></div></dialog>
+
+  <dialog id="wechat-dialog" class="modal"><div class="modal-heading"><div><p class="eyebrow small">本机微信</p><h2>选择要读取的会话</h2></div><button class="icon-button modal-close" data-close="wechat-dialog" aria-label="关闭会话选择">×</button></div><p class="modal-description">记录是否完整，取决于当前账号在这台电脑保存的历史。</p><label class="field-label" for="wechat-chat">现有会话（可选）</label><select id="wechat-chat"></select><label class="field-label" for="wechat-manual-chat">聊天名或稳定聊天 ID（可选）</label><input id="wechat-manual-chat" type="text" autocomplete="off" placeholder="例如：项目讨论群，或 wxid_…"><p id="wechat-mode" class="helper">填写后优先使用此输入。同名聊天请使用稳定聊天 ID，避免读取错误的会话。</p><label class="field-label" for="wechat-limit">最多读取消息数</label><input id="wechat-limit" type="number" min="1" max="10000" value="1000"><p id="wechat-error" class="inline-error" role="alert" hidden></p><div class="modal-actions"><button class="button secondary" data-close="wechat-dialog">取消</button><button id="wechat-import" class="button primary" disabled>读取会话</button></div></dialog>
+
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div><aside id="evidence-drawer" class="evidence-drawer" aria-labelledby="evidence-title" role="dialog" aria-modal="true" hidden><div class="drawer-heading"><div><p class="eyebrow small">回到原文</p><h2 id="evidence-title">消息证据</h2></div><button id="drawer-close" class="icon-button" aria-label="关闭证据原文">×</button></div><p id="evidence-description" class="helper"></p><div id="evidence-list" class="evidence-list"></div></aside>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>

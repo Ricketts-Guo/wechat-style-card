@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+.env
+.env.*
+!.env.example
+*.egg-info/
+build/
+dist/
+.DS_Store
+private/
+chat-data/
+live-evaluation-private.json
+*.key
+*.pem

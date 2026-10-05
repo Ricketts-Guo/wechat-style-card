@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wechat-style-card"
+version = "0.1.0"
+description = "Local WeChat communication-style cards with user-owned TypeSafe Jev credentials"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{name = "Chatprint contributors"}]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+
+[project.scripts]
+chatprint = "chatprint.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["chatprint*"]
+
+[tool.setuptools.package-data]
+chatprint = ["web/*"]

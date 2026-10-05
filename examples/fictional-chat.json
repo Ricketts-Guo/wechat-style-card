@@ -1,0 +1,1086 @@
+{
+  "fictional": true,
+  "messages": [
+    {
+      "id": "demo_0001",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:00:00+08:00",
+      "type": "text",
+      "text": "太好了，这个方案我很喜欢，谢谢你！"
+    },
+    {
+      "id": "demo_0002",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:11:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0003",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:22:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0004",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:33:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0005",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:44:00+08:00",
+      "type": "text",
+      "text": "你可真行🙂"
+    },
+    {
+      "id": "demo_0006",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T09:55:00+08:00",
+      "type": "text",
+      "text": "好呀！"
+    },
+    {
+      "id": "demo_0007",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T10:06:00+08:00",
+      "type": "text",
+      "text": "收到"
+    },
+    {
+      "id": "demo_0008",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T10:17:00+08:00",
+      "type": "text",
+      "text": "😄 谢谢"
+    },
+    {
+      "id": "demo_0009",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T10:28:00+08:00",
+      "type": "text",
+      "text": "太好了，这个方案我很喜欢，谢谢你！"
+    },
+    {
+      "id": "demo_0010",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T10:39:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0011",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T10:50:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0012",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:01:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0013",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:12:00+08:00",
+      "type": "text",
+      "text": "你可真行🙂"
+    },
+    {
+      "id": "demo_0014",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:23:00+08:00",
+      "type": "text",
+      "text": "好呀！"
+    },
+    {
+      "id": "demo_0015",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:34:00+08:00",
+      "type": "text",
+      "text": "收到"
+    },
+    {
+      "id": "demo_0016",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:45:00+08:00",
+      "type": "text",
+      "text": "😄 谢谢"
+    },
+    {
+      "id": "demo_0017",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T11:56:00+08:00",
+      "type": "text",
+      "text": "太好了，这个方案我很喜欢，谢谢你！"
+    },
+    {
+      "id": "demo_0018",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T12:07:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0019",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T12:18:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0020",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T12:29:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0021",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T12:40:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0022",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T12:51:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0023",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:02:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0024",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:13:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0025",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:24:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0026",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:35:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0027",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:46:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0028",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T13:57:00+08:00",
+      "type": "image",
+      "text": ""
+    },
+    {
+      "id": "demo_0029",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T14:08:00+08:00",
+      "type": "video",
+      "text": ""
+    },
+    {
+      "id": "demo_0030",
+      "chat_id": "demo_personal",
+      "chat_name": "虚构私聊示例",
+      "sender_id": "demo_me",
+      "sender_name": "我",
+      "timestamp": "2026-10-01T14:19:00+08:00",
+      "type": "link",
+      "text": ""
+    },
+    {
+      "id": "demo_0031",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:00:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0032",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:11:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0033",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:22:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0034",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:33:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0035",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:44:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0036",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T09:55:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0037",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T10:06:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0038",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T10:17:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0039",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T10:28:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0040",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T10:39:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0041",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T10:50:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0042",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:01:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0043",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:12:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0044",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:23:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0045",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:34:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0046",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:45:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0047",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T11:56:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0048",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T12:07:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0049",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T12:18:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0050",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T12:29:00+08:00",
+      "type": "text",
+      "text": "你可真行🙂"
+    },
+    {
+      "id": "demo_0051",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T12:40:00+08:00",
+      "type": "text",
+      "text": "好呀！"
+    },
+    {
+      "id": "demo_0052",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T12:51:00+08:00",
+      "type": "text",
+      "text": "收到"
+    },
+    {
+      "id": "demo_0053",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T13:02:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0054",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T13:13:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0055",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T13:24:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0056",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_lin",
+      "sender_name": "林小满",
+      "timestamp": "2026-10-02T13:35:00+08:00",
+      "type": "image",
+      "text": ""
+    },
+    {
+      "id": "demo_0057",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:00:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0058",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:11:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0059",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:22:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0060",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:33:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0061",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:44:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0062",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T09:55:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0063",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T10:06:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0064",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T10:17:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0065",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T10:28:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0066",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T10:39:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0067",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T10:50:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0068",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:01:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0069",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:12:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0070",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:23:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0071",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:34:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0072",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:45:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0073",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T11:56:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0074",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T12:07:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0075",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T12:18:00+08:00",
+      "type": "text",
+      "text": "你可真行🙂"
+    },
+    {
+      "id": "demo_0076",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T12:29:00+08:00",
+      "type": "text",
+      "text": "好呀！"
+    },
+    {
+      "id": "demo_0077",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T12:40:00+08:00",
+      "type": "text",
+      "text": "收到"
+    },
+    {
+      "id": "demo_0078",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T12:51:00+08:00",
+      "type": "text",
+      "text": "😄 谢谢"
+    },
+    {
+      "id": "demo_0079",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T13:02:00+08:00",
+      "type": "text",
+      "text": "太好了，这个方案我很喜欢，谢谢你！"
+    },
+    {
+      "id": "demo_0080",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T13:13:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0081",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T13:24:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0082",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T13:35:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0083",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-03T13:46:00+08:00",
+      "type": "image",
+      "text": ""
+    },
+    {
+      "id": "demo_0084",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:00:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0085",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:11:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0086",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:22:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0087",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:33:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0088",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:44:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0089",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T09:55:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0090",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T10:06:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0091",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T10:17:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0092",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T10:28:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0093",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T10:39:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0094",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T10:50:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0095",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:01:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0096",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:12:00+08:00",
+      "type": "file",
+      "text": ""
+    },
+    {
+      "id": "demo_0097",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:23:00+08:00",
+      "type": "text",
+      "text": "太好了，这个方案我很喜欢，谢谢你！"
+    },
+    {
+      "id": "demo_0098",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:34:00+08:00",
+      "type": "text",
+      "text": "我今天有点沮丧，这个问题一直没解决。"
+    },
+    {
+      "id": "demo_0099",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:45:00+08:00",
+      "type": "text",
+      "text": "资料已经更新，会议安排在周五下午。"
+    },
+    {
+      "id": "demo_0100",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T11:56:00+08:00",
+      "type": "text",
+      "text": "虽然进度有些慢，不过终于有了突破，很开心。"
+    },
+    {
+      "id": "demo_0101",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T12:07:00+08:00",
+      "type": "text",
+      "text": "你可真行🙂"
+    },
+    {
+      "id": "demo_0102",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T12:18:00+08:00",
+      "type": "text",
+      "text": "好呀！"
+    },
+    {
+      "id": "demo_0103",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T12:29:00+08:00",
+      "type": "text",
+      "text": "收到"
+    },
+    {
+      "id": "demo_0104",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T12:40:00+08:00",
+      "type": "voice",
+      "text": ""
+    },
+    {
+      "id": "demo_0105",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T12:51:00+08:00",
+      "type": "sticker",
+      "text": ""
+    },
+    {
+      "id": "demo_0106",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T13:02:00+08:00",
+      "type": "video",
+      "text": ""
+    },
+    {
+      "id": "demo_0107",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "demo_chen_other",
+      "sender_name": "陈可",
+      "timestamp": "2026-10-04T13:13:00+08:00",
+      "type": "other",
+      "text": ""
+    },
+    {
+      "id": "demo_system",
+      "chat_id": "demo_project@chatroom",
+      "chat_name": "虚构项目讨论群",
+      "sender_id": "__system__",
+      "sender_name": "系统",
+      "timestamp": "2026-10-01T09:00:00+08:00",
+      "type": "other",
+      "text": "",
+      "is_system": true
+    }
+  ]
+}
