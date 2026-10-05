@@ -157,6 +157,128 @@ class ImportTests(unittest.TestCase):
 
 
 class AnalyticsTests(unittest.TestCase):
+    def test_manual_correction_all_dimensions_preserves_originals_and_counts(self):
+        analysis = {
+            "message_id": "a", "emotion": "positive", "sentiment": "positive", "intent": "support", "style": "polite",
+            "original_emotion": "negative", "original_intent": "complaint", "original_style": "direct",
+            "manual_original_emotion": "unknown", "manual_original_intent": "other", "manual_original_style": "unknown",
+            "manual_original_review_dimensions": ["emotion", "intent", "style"],
+            "manual_dimensions": ["emotion", "intent", "style"], "review_dimensions": [], "needs_review": False,
+            "confidence": 0.3, "intent_confidence": 0.2, "style_confidence": 0.4,
+            "probabilities": {"negative": 0.6, "positive": 0.4}, "source": "manual", "original_source": "jev", "model": "jev-example",
+        }
+        summary = summarize([row("a")], [analysis])
+        person = summary["people"][0]
+        self.assertEqual(person["emotion"]["counts"]["positive"], 1)
+        self.assertEqual(person["emotion"]["manual_count"], 1)
+        self.assertEqual(person["expression"]["intent_counts"]["support"], 1)
+        self.assertEqual(person["expression"]["style_counts"]["polite"], 1)
+        self.assertEqual(person["expression"]["intent_analyzed"], 1)
+        self.assertEqual(person["expression"]["style_analyzed"], 1)
+        self.assertEqual(person["expression"]["intent_manual_count"], 1)
+        self.assertEqual(person["expression"]["style_manual_count"], 1)
+        evidence = person["evidence"][0]
+        for field in ("original_emotion", "original_intent", "original_style", "manual_original_emotion", "manual_original_intent", "manual_original_style", "manual_original_review_dimensions", "manual_dimensions", "original_source", "model", "probabilities"):
+            self.assertEqual(evidence[field], analysis[field])
+        self.assertFalse(evidence["needs_review"])
+        self.assertEqual(evidence["review_dimensions"], [])
+        report = make_report([row("a")], [analysis])
+        self.assertIn("1 条使用人工修正的情绪分类", report)
+        self.assertIn("表达意图：实际分析 1 条文字；其中 1 条人工修正", report)
+        self.assertIn("文字风格：实际分析 1 条文字；其中 1 条人工修正", report)
+        self.assertTrue(any("人工修正" in warning for warning in summary["warnings"]))
+
+    def test_manual_partial_correction_keeps_uncorrected_review_and_independent_denominators(self):
+        analyses = [
+            {"message_id": "a", "emotion": "unknown", "intent": "question", "style": "unknown", "original_emotion": "negative",
+             "original_intent": "sharing", "original_style": "direct", "source": "manual", "original_source": "jev",
+             "manual_dimensions": ["intent"], "manual_original_intent": "other",
+             "manual_original_review_dimensions": ["emotion", "intent", "style"],
+             "review_dimensions": ["emotion", "style"], "needs_review": True},
+            {"message_id": "b", "intent": "coordination", "style": "direct", "source": "manual", "manual_dimensions": ["intent", "style"], "review_dimensions": [], "needs_review": False},
+        ]
+        person = summarize([row("a"), row("b")], analyses)["people"][0]
+        self.assertEqual(person["emotion"]["analyzed"], 1)
+        self.assertEqual(person["emotion"]["manual_count"], 0)
+        self.assertEqual(person["emotion"]["counts"]["unknown"], 1)
+        self.assertEqual(person["expression"]["intent_analyzed"], 2)
+        self.assertEqual(person["expression"]["style_analyzed"], 2)
+        self.assertEqual(person["expression"]["intent_manual_count"], 2)
+        self.assertEqual(person["expression"]["style_manual_count"], 1)
+        self.assertEqual(person["evidence"][0]["review_dimensions"], ["emotion", "style"])
+        self.assertTrue(person["evidence"][0]["needs_review"])
+        self.assertFalse(person["evidence"][1]["needs_review"])
+
+    def test_legacy_manual_emotion_does_not_claim_model_intent_style_were_corrected(self):
+        person = summarize([row("a")], [{"message_id": "a", "emotion": "neutral", "intent": "sharing", "style": "direct",
+                                        "source": "manual", "pre_manual_emotion": "unknown", "review_dimensions": [], "needs_review": False}])["people"][0]
+        self.assertEqual(person["emotion"]["manual_count"], 1)
+        self.assertEqual(person["expression"]["intent_manual_count"], 0)
+        self.assertEqual(person["expression"]["style_manual_count"], 0)
+        self.assertEqual(person["evidence"][0]["manual_dimensions"], ["emotion"])
+        self.assertEqual(person["evidence"][0]["manual_original_emotion"], "unknown")
+        self.assertIsNone(person["evidence"][0]["original_emotion"])
+
+    def test_reset_manual_dimension_restores_review_and_model_counts(self):
+        restored = {"message_id": "a", "emotion": "neutral", "intent": "other", "style": "direct", "source": "jev", "model": "jev-example",
+                    "original_intent": "question", "manual_original_intent": "other", "manual_original_review_dimensions": ["intent"],
+                    "manual_dimensions": [], "review_dimensions": ["intent"], "needs_review": True}
+        summary = summarize([row("a")], [restored])
+        person = summary["people"][0]
+        self.assertEqual(person["expression"]["intent_counts"]["other"], 1)
+        self.assertEqual(person["expression"]["intent_counts"]["question"], 0)
+        self.assertEqual(person["expression"]["intent_manual_count"], 0)
+        self.assertEqual(person["evidence"][0]["review_dimensions"], ["intent"])
+        self.assertTrue(person["evidence"][0]["needs_review"])
+        self.assertEqual(person["evidence"][0]["original_intent"], "question")
+        self.assertFalse(any("人工修正" in warning for warning in summary["warnings"]))
+
+    def test_manual_correction_keeps_fictional_demo_provenance_in_report(self):
+        analysis = {"message_id": "a", "emotion": "positive", "intent": "support", "style": "polite", "source": "manual",
+                    "original_source": "demo_annotation", "manual_dimensions": ["emotion", "intent", "style"],
+                    "review_dimensions": [], "needs_review": False}
+        summary = summarize([row("a")], [analysis])
+        self.assertTrue(any("虚构示例" in warning for warning in summary["warnings"]))
+        self.assertIn("虚构示例", make_report([row("a")], [analysis]))
+        actual = {**analysis, "original_source": "jev"}
+        self.assertFalse(any("虚构示例" in warning for warning in summarize([row("a")], [actual])["warnings"]))
+
+    def test_review_dimensions_original_labels_and_probability_metadata_preserved(self):
+        analysis = {
+            "message_id": "a", "emotion": "neutral", "intent": "other", "style": "unknown",
+            "original_emotion": "neutral", "original_intent": "question", "original_style": "direct",
+            "confidence": 0.8, "intent_confidence": 0.4, "style_confidence": 0.3,
+            "probabilities": {"neutral": 0.84, "unknown": 0.16},
+            "intent_probabilities": {"question": 0.5, "other": 0.5},
+            "style_probabilities": {"direct": 0.5, "unknown": 0.5},
+            "review_dimensions": ["intent", "style"], "needs_review": False,
+            "source": "jev", "model": "jev-fixture", "prompt_version": "fixture-v2",
+        }
+        evidence = summarize([row("a")], [analysis])["people"][0]["evidence"][0]
+        for key in ("original_emotion", "original_intent", "original_style", "probabilities", "intent_probabilities", "style_probabilities", "review_dimensions", "prompt_version"):
+            self.assertEqual(evidence[key], analysis[key])
+        self.assertTrue(evidence["needs_review"])
+        self.assertEqual(evidence["sentiment"], "neutral")
+        self.assertEqual(evidence["intent"], "other")
+
+    def test_legacy_review_flag_and_dimension_dictionary_compatibility(self):
+        analyses = [
+            {"message_id": "a", "emotion": "unknown", "original_emotion": "positive", "needs_review": True},
+            {"message_id": "b", "emotion": "neutral", "intent": "other", "intent_confidence": 0.3, "needs_review": False},
+            {"message_id": "c", "emotion": "neutral", "review_dimensions": {"emotion": False, "intent": True, "style": False}},
+            {"message_id": "d", "intent": "support"},
+        ]
+        evidence = summarize([row(key) for key in ("a", "b", "c", "d")], analyses)["people"][0]["evidence"]
+        self.assertEqual(evidence[0]["review_dimensions"], ["emotion"])
+        self.assertEqual(evidence[1]["review_dimensions"], ["intent"])
+        self.assertEqual(evidence[2]["review_dimensions"], ["intent"])
+        self.assertEqual(evidence[3]["review_dimensions"], [])
+        self.assertTrue(evidence[0]["needs_review"])
+        self.assertTrue(evidence[1]["needs_review"])
+        self.assertTrue(evidence[2]["needs_review"])
+        self.assertFalse(evidence[3]["needs_review"])
+        self.assertEqual(evidence[0]["style_probabilities"], {})
+
     def test_expression_separate_denominators_and_preserve_review_metadata(self):
         messages = [row(str(i)) for i in range(12)]
         analyses = [{"message_id": str(i), "emotion": "neutral", "intent": "support" if i < 6 else "other", "style": "polite",

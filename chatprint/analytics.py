@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections import Counter, defaultdict
 from datetime import datetime
+import math
 from statistics import median
 
 from .models import (
@@ -12,6 +13,28 @@ from .models import (
 
 INTENT_LABELS = {"support": "鼓励与感谢", "question": "提问", "coordination": "协调安排", "sharing": "分享", "complaint": "抱怨", "other": "其他或不明确"}
 STYLE_LABELS = {"playful": "轻松幽默", "polite": "礼貌", "direct": "直接", "unknown": "无法判断"}
+
+
+def _review_dimensions(analysis, sentiment, intent, style):
+    """Keep dimension-specific review metadata, including older result formats."""
+    raw = analysis.get("review_dimensions")
+    if isinstance(raw, dict):
+        dimensions = [key for key in ("emotion", "intent", "style") if raw.get(key) is True]
+    elif isinstance(raw, (list, tuple)):
+        dimensions = [key for key in ("emotion", "intent", "style") if key in raw]
+    else:
+        dimensions = []
+        if sentiment == "unknown" or analysis.get("needs_review") is True:
+            # Older Jev responses had a single emotion-only needs_review flag.
+            dimensions.append("emotion")
+        for key, confidence_key, label in (("emotion", "confidence", sentiment), ("intent", "intent_confidence", intent), ("style", "style_confidence", style)):
+            confidence = analysis.get(confidence_key)
+            if label is not None and not isinstance(confidence, bool) and isinstance(confidence, (int, float)) and math.isfinite(confidence) and 0 <= confidence < 0.55:
+                if key not in dimensions:
+                    dimensions.append(key)
+        if style == "unknown" and "style" not in dimensions:
+            dimensions.append("style")
+    return dimensions
 
 
 def _percentage(count: int, total: int) -> float:
@@ -90,15 +113,52 @@ def _analysis_index(analyses, messages):
         if style is not None and style not in STYLE_LABELS:
             style = "unknown"
             warnings.append("不支持的表达风格已归为‘无法判断’。")
+        sentiment = sentiment if has_emotion else None
+        review_dimensions = _review_dimensions(analysis, sentiment, intent, style)
+        manual_dimensions = analysis.get("manual_dimensions")
+        if isinstance(manual_dimensions, (list, tuple)):
+            manual_dimensions = [key for key in ("emotion", "intent", "style") if key in manual_dimensions]
+        elif source == "manual":
+            # Older frontend results corrected only emotion and retained the
+            # model's intent/style. New results always supply explicit dimensions.
+            manual_dimensions = ["emotion"] if has_emotion else [key for key, value in (("intent", intent), ("style", style)) if value is not None]
+        else:
+            manual_dimensions = []
+        manual_review = analysis.get("manual_original_review_dimensions", [])
+        if isinstance(manual_review, dict):
+            manual_review = [key for key in ("emotion", "intent", "style") if manual_review.get(key) is True]
+        elif isinstance(manual_review, (list, tuple)):
+            manual_review = [key for key in ("emotion", "intent", "style") if key in manual_review]
+        else:
+            manual_review = []
         result[message_id] = {
-            "message_id": message_id, "sentiment": sentiment if has_emotion else None,
+            "message_id": message_id, "sentiment": sentiment,
             "intent": intent, "style": style, "model": analysis.get("model", ""),
+            "original_emotion": analysis.get("original_emotion", None if "emotion" in manual_dimensions else sentiment),
+            "original_intent": analysis.get("original_intent", None if "intent" in manual_dimensions else intent),
+            "original_style": analysis.get("original_style", None if "style" in manual_dimensions else style),
             "confidence": analysis.get("confidence"), "intent_confidence": analysis.get("intent_confidence"),
             "style_confidence": analysis.get("style_confidence"),
-            "needs_review": bool(analysis.get("needs_review", sentiment == "unknown")),
+            "probabilities": analysis.get("probabilities", {}),
+            "intent_probabilities": analysis.get("intent_probabilities", {}),
+            "style_probabilities": analysis.get("style_probabilities", {}),
+            "review_dimensions": review_dimensions,
+            "needs_review": analysis.get("needs_review") is True or bool(review_dimensions),
+            "prompt_version": analysis.get("prompt_version", ""),
+            "manual_dimensions": manual_dimensions,
+            "manual_original_emotion": analysis.get("manual_original_emotion", analysis.get("pre_manual_emotion")),
+            "manual_original_intent": analysis.get("manual_original_intent", analysis.get("pre_manual_intent")),
+            "manual_original_style": analysis.get("manual_original_style", analysis.get("pre_manual_style")),
+            "manual_original_review_dimensions": manual_review,
+            "pre_manual_emotion": analysis.get("pre_manual_emotion"),
+            "pre_manual_intent": analysis.get("pre_manual_intent"), "pre_manual_style": analysis.get("pre_manual_style"),
+            "original_source": analysis.get("original_source"),
             "reason": str(analysis.get("reason", ""))[:500], "source": source,
         }
-        if source in ("demo", "demo_annotation", "example", "manual_demo"):
+        if manual_dimensions:
+            warnings.append("当前统计包含人工修正的分类结果；模型原始标签和选项分布仅作为记录保留。")
+        demo_sources = ("demo", "demo_annotation", "example", "manual_demo")
+        if source in demo_sources or analysis.get("original_source") in demo_sources:
             warnings.append("当前包含虚构示例的人工情绪标注，属于演示数据，不是 Jev API 实测结果。")
     return result, list(dict.fromkeys(warnings))
 
@@ -190,16 +250,23 @@ def summarize(messages: list, analyses: list | None = None, filters: dict | None
         counts = {emotion: 0 for emotion in EMOTIONS}
         intent_counts = {key: 0 for key in INTENT_LABELS}
         style_counts = {key: 0 for key in STYLE_LABELS}
+        manual_counts = {"emotion": 0, "intent": 0, "style": 0}
         evidence = []
         for record in texts:
             analysis = analysis_by_id.get(record["id"])
             if analysis:
                 if analysis["sentiment"] is not None:
                     counts[analysis["sentiment"]] += 1
+                    if "emotion" in analysis["manual_dimensions"]:
+                        manual_counts["emotion"] += 1
                 if analysis["intent"] is not None:
                     intent_counts[analysis["intent"]] += 1
+                    if "intent" in analysis["manual_dimensions"]:
+                        manual_counts["intent"] += 1
                 if analysis["style"] is not None:
                     style_counts[analysis["style"]] += 1
+                    if "style" in analysis["manual_dimensions"]:
+                        manual_counts["style"] += 1
                 if len(evidence) < 5:
                     evidence.append({
                         "message_id": record["id"], "timestamp": record.get("timestamp", ""),
@@ -208,11 +275,23 @@ def summarize(messages: list, analyses: list | None = None, filters: dict | None
                         "intent": analysis["intent"], "style": analysis["style"], "model": analysis["model"],
                         "confidence": analysis["confidence"], "intent_confidence": analysis["intent_confidence"],
                         "style_confidence": analysis["style_confidence"], "needs_review": analysis["needs_review"],
+                        "original_emotion": analysis["original_emotion"], "original_intent": analysis["original_intent"],
+                        "original_style": analysis["original_style"], "probabilities": analysis["probabilities"],
+                        "intent_probabilities": analysis["intent_probabilities"], "style_probabilities": analysis["style_probabilities"],
+                        "review_dimensions": analysis["review_dimensions"], "prompt_version": analysis["prompt_version"],
+                        "manual_dimensions": analysis["manual_dimensions"],
+                        "manual_original_emotion": analysis["manual_original_emotion"],
+                        "manual_original_intent": analysis["manual_original_intent"],
+                        "manual_original_style": analysis["manual_original_style"],
+                        "manual_original_review_dimensions": analysis["manual_original_review_dimensions"],
+                        "pre_manual_emotion": analysis["pre_manual_emotion"], "original_source": analysis["original_source"],
+                        "pre_manual_intent": analysis["pre_manual_intent"], "pre_manual_style": analysis["pre_manual_style"],
                     })
         analyzed = sum(counts.values())
         expression = {
             "intent_counts": intent_counts, "style_counts": style_counts,
             "intent_analyzed": sum(intent_counts.values()), "style_analyzed": sum(style_counts.values()),
+            "intent_manual_count": manual_counts["intent"], "style_manual_count": manual_counts["style"],
             "intent_percentages": {key: _percentage(value, sum(intent_counts.values())) for key, value in intent_counts.items()},
             "style_percentages": {key: _percentage(value, sum(style_counts.values())) for key, value in style_counts.items()},
         }
@@ -231,6 +310,7 @@ def summarize(messages: list, analyses: list | None = None, filters: dict | None
                 "counts": counts, "percentages": {key: _percentage(value, analyzed) for key, value in counts.items()},
                 "analyzed": analyzed, "total_text": len(texts), "coverage": _percentage(analyzed, len(texts)),
                 "unanalyzed": len(texts) - analyzed,
+                "manual_count": manual_counts["emotion"],
             },
             "evidence": evidence,
         })
@@ -293,6 +373,8 @@ def make_report(messages, analyses=None, anonymize=True, filters=None) -> str:
             lines.append("")
         emotion = person["emotion"]
         lines += [f"情绪分析覆盖：{emotion['analyzed']}/{emotion['total_text']} 条非空文字（{emotion['coverage']}%）；未分析 {emotion['unanalyzed']} 条。", ""]
+        if emotion["manual_count"]:
+            lines += [f"其中 {emotion['manual_count']} 条使用人工修正的情绪分类。", ""]
         if emotion["analyzed"]:
             lines += ["| 情绪表达 | 数量 | 已分析文字占比 |", "| --- | ---: | ---: |"]
             for key in EMOTIONS:
@@ -304,7 +386,8 @@ def make_report(messages, analyses=None, anonymize=True, filters=None) -> str:
         for dimension, title, labels in (("intent", "表达意图", INTENT_LABELS), ("style", "文字风格", STYLE_LABELS)):
             denominator = expression[f"{dimension}_analyzed"]
             if denominator:
-                lines += [f"{title}：实际分析 {denominator} 条文字；比例以这些结果为分母。", "", "| 分类 | 数量 | 占比 |", "| --- | ---: | ---: |"]
+                manual_note = f"；其中 {expression[dimension + '_manual_count']} 条人工修正" if expression[dimension + "_manual_count"] else ""
+                lines += [f"{title}：实际分析 {denominator} 条文字{manual_note}；比例以这些结果为分母。", "", "| 分类 | 数量 | 占比 |", "| --- | ---: | ---: |"]
                 for key, label in labels.items():
                     lines.append(f"| {label} | {expression[dimension + '_counts'][key]} | {expression[dimension + '_percentages'][key]}% |")
                 lines.append("")

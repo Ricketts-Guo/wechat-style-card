@@ -65,6 +65,8 @@ class HttpBoundaryTests(unittest.TestCase):
         status, headers, body = self.request("/api/settings")
         self.assertEqual(status, 200)
         self.assertFalse(body["configured"])
+        self.assertEqual(body["prompt_version"], server.PROMPT_VERSION)
+        self.assertTrue(body["choice_order_supported"])
         self.assertNotIn("api_key", body)
         self.assertEqual(headers["Cache-Control"], "no-store")
         self.assertEqual(headers["X-Content-Type-Options"], "nosniff")
@@ -200,6 +202,75 @@ class HttpBoundaryTests(unittest.TestCase):
         self.assertNotEqual(first[2]["job_id"], second[2]["job_id"])
         self.assertEqual(start.call_count, 2)
 
+    def test_reverse_analysis_uses_approved_snapshot_and_forwards_only_order(self):
+        _, _, preview = self.request("/api/preview", "POST", {"messages": [message(1), message(2)]})
+        expected = next(row for row in preview["messages"] if row["id"] == "2")
+        with mock.patch.object(self.state, "start", return_value="synthetic-reverse-job") as start:
+            status, _, body = self.request("/api/analyze", "POST", {
+                "preview_id": preview["preview_id"], "selected_ids": ["2"], "choice_order": "reverse",
+                "messages": [message(2, text="TAMPERED_REVERSE_TEXT")]})
+        self.assertEqual(status, 202)
+        self.assertEqual(body["selected"], 1)
+        start.assert_called_once_with([expected], choice_order="reverse")
+
+    def test_choice_order_starts_distinct_jobs_but_repeated_order_reuses_job(self):
+        _, _, preview = self.request("/api/preview", "POST", {"messages": [message(1), message(2)]})
+        def fake_start(items, choice_order="standard"):
+            job_id = "synthetic-order-" + choice_order
+            self.state.jobs[job_id] = {"status": "completed"}
+            return job_id
+        body = {"preview_id": preview["preview_id"], "selected_ids": ["1", "2"]}
+        with mock.patch.object(self.state, "start", side_effect=fake_start) as start:
+            standard = self.request("/api/analyze", "POST", body)
+            reverse = self.request("/api/analyze", "POST", {**body, "choice_order": "reverse"})
+            repeated_reverse = self.request("/api/analyze", "POST", {
+                **body, "selected_ids": ["2", "1", "2"], "choice_order": "reverse"})
+            explicit_standard = self.request("/api/analyze", "POST", {**body, "choice_order": "standard"})
+        self.assertEqual([result[0] for result in (standard, reverse, repeated_reverse, explicit_standard)], [202] * 4)
+        self.assertNotEqual(standard[2]["job_id"], reverse[2]["job_id"])
+        self.assertEqual(reverse[2]["job_id"], repeated_reverse[2]["job_id"])
+        self.assertEqual(standard[2]["job_id"], explicit_standard[2]["job_id"])
+        self.assertEqual(start.call_count, 2)
+
+    def test_invalid_choice_order_never_starts_a_job_or_model_request(self):
+        self.state.configure("synthetic-order-validation-key")
+        _, _, preview = self.request("/api/preview", "POST", {"messages": [message()]})
+        with mock.patch.object(self.state.client, "evaluate") as evaluate, mock.patch.object(server, "analyze_prepared") as analyze:
+            for order in (None, True, 1, "", "random", "reverse ", [], {}):
+                for approval in ({"messages": [message()]}, {"preview_id": preview["preview_id"], "selected_ids": ["1"]}):
+                    with self.subTest(order=order, snapshot="preview_id" in approval):
+                        status, _, body = self.request("/api/analyze", "POST", {**approval, "choice_order": order})
+                        self.assertEqual(status, 400)
+                        self.assertIn("error", body)
+            evaluate.assert_not_called()
+            analyze.assert_not_called()
+        self.assertEqual(self.state.jobs, {})
+
+    def test_reverse_job_metadata_matches_the_worker_order(self):
+        self.state.configure("synthetic-reverse-worker-key")
+        finished = threading.Event()
+        observed = []
+        def fake_analyze(client, items, progress=None, cancelled=None, choice_order="standard"):
+            observed.append(choice_order)
+            finished.set()
+            return {"analyses": [{"message_id": row["id"], "emotion": "positive", "choice_order": choice_order} for row in items],
+                    "errors": [], "usage": {"input_tokens": 1, "output_tokens": 1}, "models": ["synthetic-model"], "requests": 1, "cached_requests": 0}
+        with mock.patch.object(server, "analyze_prepared", side_effect=fake_analyze):
+            status, _, created = self.request("/api/analyze", "POST", {"messages": [message()], "choice_order": "reverse"})
+            self.assertEqual(status, 202)
+            self.assertTrue(finished.wait(2))
+            for _ in range(100):
+                status, _, job = self.request("/api/jobs/" + created["job_id"])
+                if job["status"] != "running":
+                    break
+                threading.Event().wait(.005)
+        self.assertEqual(status, 200)
+        self.assertEqual(job["status"], "completed")
+        self.assertEqual(observed, ["reverse"])
+        self.assertEqual(job["choice_order"], "reverse")
+        self.assertEqual(job["prompt_version"], server.PROMPT_VERSION)
+        self.assertEqual(job["analyses"][0]["choice_order"], "reverse")
+
     def test_http_preview_excluded_targets_remain_in_context(self):
         rows = [message(1, text="前文 https://example.org/private"),
                 {**message(2, text="收到"), "timestamp": "2026-10-05T10:01:00+08:00"}]
@@ -326,7 +397,7 @@ class JobTests(unittest.TestCase):
         finished = threading.Event()
         failure = {"analyses": [], "errors": [{"message_id": "1", "error": "service unavailable"}],
                    "usage": {"input_tokens": 0, "output_tokens": 0}, "models": [], "requests": 0, "cached_requests": 0}
-        def fake_analyze(client, items, progress=None, cancelled=None):
+        def fake_analyze(client, items, progress=None, cancelled=None, choice_order="standard"):
             try:
                 self.assertEqual(items, prepared)
                 return failure
@@ -354,7 +425,7 @@ class JobTests(unittest.TestCase):
         state.configure("synthetic-key-for-job-test")
         prepared = server.prepare_messages([message(1), message(2), message(3)])["messages"]
         finished = threading.Event()
-        def fail_after_partial_progress(client, items, progress=None, cancelled=None):
+        def fail_after_partial_progress(client, items, progress=None, cancelled=None, choice_order="standard"):
             progress({"analyses": [{"message_id": "1", "emotion": "positive"}], "errors": [],
                       "usage": {"input_tokens": 100, "output_tokens": 10}, "models": ["synthetic-model"], "requests": 1, "cached_requests": 0})
             finished.set()
@@ -451,6 +522,120 @@ class CommandBoundaryTests(unittest.TestCase):
 
 
 class EvaluationToolTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        script = Path(__file__).resolve().parents[1] / "tools" / "evaluate.py"
+        spec = importlib.util.spec_from_file_location("chatprint_synthetic_eval_metric_test", script)
+        cls.module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cls.module)
+
+    def reference_case(self, identifier, emotion="neutral", intent="question", style="direct"):
+        return {"id": identifier, "expected_emotion": [emotion], "expected_intent": [intent], "expected_style": [style]}
+
+    def test_evaluation_separates_failed_missing_raw_and_abstained_denominators(self):
+        cases = [self.reference_case("one"), self.reference_case("two", "unknown", "other", "unknown"),
+                 self.reference_case("three", "negative", "complaint"), self.reference_case("missing", "positive", "support", "polite")]
+        analyses = [
+            {"message_id": "one", "emotion": "neutral", "original_emotion": "neutral", "confidence": .96,
+             "intent": "question", "original_intent": "question", "intent_confidence": .95,
+             "style": "direct", "original_style": "direct", "style_confidence": .91},
+            {"message_id": "two", "emotion": "unknown", "original_emotion": "positive", "confidence": .35,
+             "intent": "other", "original_intent": "support", "intent_confidence": .30,
+             "style": "unknown", "original_style": "polite", "style_confidence": .30},
+            {"message_id": "three", "emotion": "negative", "original_emotion": "negative", "confidence": .90,
+             "intent": "other", "original_intent": "other", "intent_confidence": .92,
+             "style": "direct", "original_style": "direct", "style_confidence": .89},
+            {"message_id": "not-submitted", "emotion": "positive", "confidence": 1},
+        ]
+        comparisons, metrics = self.module.compare_results(cases, analyses)
+        self.assertEqual(len(comparisons), 4)
+        self.assertIsNone(comparisons[-1]["actual"])
+        for dimension in ("emotion", "intent", "style"):
+            self.assertEqual(metrics[dimension]["submitted"], 4)
+            self.assertEqual(metrics[dimension]["valid_results"], 3)
+            self.assertEqual(metrics[dimension]["raw_available"], 3)
+            self.assertEqual(metrics[dimension]["low_confidence"], 1)
+        emotion = metrics["emotion"]
+        self.assertEqual((emotion["agreed"], emotion["agreement_percent"]), (3, 75))
+        self.assertEqual((emotion["raw_agreed"], emotion["raw_agreement_percent"]), (2, 66.7))
+        self.assertEqual((emotion["decided"], emotion["unknown_or_other"]), (2, 1))
+        self.assertEqual(emotion["decision_coverage_percent"], 66.7)
+        self.assertEqual(emotion["decided_agreement_percent"], 100)
+        intent = metrics["intent"]
+        self.assertEqual((intent["agreed"], intent["agreement_percent"]), (2, 50))
+        self.assertEqual((intent["raw_agreed"], intent["raw_agreement_percent"]), (1, 33.3))
+        self.assertEqual((intent["decided"], intent["unknown_or_other"]), (1, 2))
+        self.assertEqual(intent["decision_coverage_percent"], 33.3)
+        self.assertEqual(intent["decided_agreement_percent"], 100)
+
+    def test_v1_low_confidence_intent_and_style_are_not_invented_as_raw_choices(self):
+        cases = [self.reference_case("clear", style="polite"), self.reference_case("uncertain", "negative", "support", "polite")]
+        analyses = [
+            {"message_id": "clear", "emotion": "neutral", "original_emotion": "neutral", "confidence": .95,
+             "intent": "question", "intent_confidence": .95, "style": "polite", "style_confidence": .95},
+            {"message_id": "uncertain", "emotion": "unknown", "original_emotion": "negative", "confidence": .30,
+             "intent": "other", "intent_confidence": .30, "style": "unknown", "style_confidence": .30},
+        ]
+        comparisons, metrics = self.module.compare_results(cases, analyses)
+        self.assertEqual(comparisons[1]["raw_labels"]["emotion"], "negative")
+        self.assertTrue(comparisons[1]["raw_agreement"]["emotion"])
+        for dimension in ("intent", "style"):
+            self.assertIsNone(comparisons[1]["raw_labels"][dimension])
+            self.assertIsNone(comparisons[1]["raw_agreement"][dimension])
+            self.assertEqual(metrics[dimension]["raw_available"], 1)
+            self.assertEqual(metrics[dimension]["raw_agreement_percent"], 100)
+            self.assertEqual(metrics[dimension]["agreement_percent"], 50)
+        self.assertEqual(metrics["emotion"]["raw_available"], 2)
+
+    def test_no_results_and_no_cases_have_defined_empty_metrics(self):
+        for cases in ([], [self.reference_case("missing")]):
+            with self.subTest(submitted=len(cases)):
+                comparisons, metrics = self.module.compare_results(cases, [])
+                self.assertEqual(len(comparisons), len(cases))
+                for dimension in ("emotion", "intent", "style"):
+                    metric = metrics[dimension]
+                    self.assertEqual(metric["valid_results"], 0)
+                    self.assertEqual(metric["agreement_percent"], 0)
+                    self.assertEqual(metric["decision_coverage_percent"], 0)
+                    self.assertIsNone(metric["raw_agreement_percent"])
+                    self.assertIsNone(metric["decided_agreement_percent"])
+
+    def test_partial_legacy_dimensions_and_invalid_raw_labels_are_unavailable(self):
+        cases = [self.reference_case("partial")]
+        analyses = [{"message_id": "partial", "emotion": "neutral", "original_emotion": "neutral", "confidence": .95,
+                     "intent": ["question"], "original_intent": {"label": "question"}, "intent_confidence": .95,
+                     "original_style": "invented-style", "style_confidence": .95}]
+        comparisons, metrics = self.module.compare_results(cases, analyses)
+        self.assertEqual(metrics["emotion"]["valid_results"], 1)
+        for dimension in ("intent", "style"):
+            self.assertEqual(metrics[dimension]["valid_results"], 0)
+            self.assertEqual(metrics[dimension]["decided"], 0)
+            self.assertEqual(metrics[dimension]["raw_available"], 0)
+            self.assertIsNone(comparisons[0]["raw_labels"][dimension])
+            self.assertIsNone(comparisons[0]["raw_agreement"][dimension])
+            self.assertFalse(comparisons[0]["agreement"][dimension])
+
+    def test_absent_or_invalid_confidence_is_unavailable_not_low_or_inferred_raw(self):
+        invalid_values = (None, True, False, -.1, 1.1, "0.95", float("nan"), float("inf"), [], {})
+        cases, analyses = [], []
+        for i, value in enumerate(invalid_values):
+            identifier = f"invalid-confidence-{i}"
+            cases.append(self.reference_case(identifier))
+            analyses.append({"message_id": identifier, "emotion": "neutral", "confidence": value,
+                             "intent": "question", "intent_confidence": value,
+                             "style": "direct", "style_confidence": value})
+        cases.append(self.reference_case("missing-confidence"))
+        analyses.append({"message_id": "missing-confidence", "emotion": "neutral", "intent": "question", "style": "direct"})
+        comparisons, metrics = self.module.compare_results(cases, analyses)
+        for dimension in ("emotion", "intent", "style"):
+            metric = metrics[dimension]
+            self.assertEqual(metric["valid_results"], len(cases))
+            self.assertEqual(metric["agreed"], len(cases))
+            self.assertEqual(metric["confidence_unavailable"], len(cases))
+            self.assertEqual(metric["low_confidence"], 0)
+            self.assertEqual(metric["raw_available"], 0)
+            self.assertTrue(all(row["raw_labels"][dimension] is None for row in comparisons))
+
     def test_unconfigured_evaluation_message_survives_windows_pipe_encoding(self):
         script = Path(__file__).resolve().parents[1] / "tools" / "evaluate.py"
         spec = importlib.util.spec_from_file_location("chatprint_synthetic_eval_encoding_test", script)

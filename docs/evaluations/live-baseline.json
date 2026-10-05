@@ -1,0 +1,1930 @@
+{
+  "evaluation": "synthetic-reference-agreement",
+  "date_utc": "2026-10-05T10:00:45.242568+00:00",
+  "fixture": "jev_eval.json",
+  "fixture_sha256": "2c689df236bd851ed3a608ae097bdf80c33399d47a1f993289dcadfabf6fc876",
+  "fixture_hash_provenance": "computed_offline_from_unchanged_prewritten_fixture; original_report_did_not_capture_hash",
+  "fixture_metadata": {
+    "name": "ChatPrint fictional bilingual reference-consistency set",
+    "version": 1,
+    "fictional": true,
+    "case_count": 36,
+    "description": "完全虚构、以中文为主的逐条聊天表达评估集。每个案例使用独立聊天，只有显式 preceding_context 可以辅助判断。",
+    "metric": "reference_consistency",
+    "metric_note": "统计模型结果是否落入人工参考标签集合；这是合成案例参考一致率，不代表真实微信用户、真实人群或人格分析准确率。",
+    "ambiguity_note": "每个 expected 字段都是允许标签数组。存在真实语义歧义时列出多个允许结果，理由写在 rationale；不能依据评估结果事后扩充参考标签。",
+    "label_scope": "只判断目标 text 中发送者自己的情绪、主要表达意图和文字风格；引用他人的情绪不归给发送者。",
+    "emotion_labels": [
+      "positive",
+      "negative",
+      "neutral",
+      "mixed",
+      "unknown"
+    ],
+    "intent_labels": [
+      "support",
+      "question",
+      "coordination",
+      "sharing",
+      "complaint",
+      "other"
+    ],
+    "style_labels": [
+      "playful",
+      "polite",
+      "direct",
+      "unknown"
+    ]
+  },
+  "evaluated_cases": 36,
+  "choice_order": "standard",
+  "choice_order_provenance": "default_standard_before_order_experiment",
+  "prompt_version": "chatprint-v1",
+  "models": [
+    "jev-1.13.0"
+  ],
+  "confidence_threshold": 0.55,
+  "metrics": {
+    "emotion": {
+      "agreed": 35,
+      "submitted": 36,
+      "valid_results": 36,
+      "agreement_percent": 97.2,
+      "raw_agreed": 34,
+      "raw_available": 36,
+      "raw_agreement_percent": 94.4,
+      "decided": 29,
+      "unknown_or_other": 7,
+      "decision_coverage_percent": 80.6,
+      "low_confidence": 4,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 96.6
+    },
+    "intent": {
+      "agreed": 32,
+      "submitted": 36,
+      "valid_results": 36,
+      "agreement_percent": 88.9,
+      "raw_agreed": 31,
+      "raw_available": 34,
+      "raw_agreement_percent": 91.2,
+      "decided": 32,
+      "unknown_or_other": 4,
+      "decision_coverage_percent": 88.9,
+      "low_confidence": 2,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 90.6
+    },
+    "style": {
+      "agreed": 32,
+      "submitted": 36,
+      "valid_results": 36,
+      "agreement_percent": 88.9,
+      "raw_agreed": 32,
+      "raw_available": 32,
+      "raw_agreement_percent": 100.0,
+      "decided": 31,
+      "unknown_or_other": 5,
+      "decision_coverage_percent": 86.1,
+      "low_confidence": 4,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    }
+  },
+  "usage": {
+    "input_tokens": 29182,
+    "output_tokens": 5076
+  },
+  "requests": 7,
+  "cached_requests": 1,
+  "errors": [],
+  "elapsed_seconds": 4.12,
+  "comparisons": [
+    {
+      "id": "eval001",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval001",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "support",
+        "intent_confidence": 1.0,
+        "style": "polite",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval002",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval002",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.99,
+        "style": "direct",
+        "style_confidence": 0.98,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval003",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval003",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "support",
+        "intent_confidence": 1.0,
+        "style": "unknown",
+        "style_confidence": 0.38,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": null
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": null
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      }
+    },
+    {
+      "id": "eval004",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval004",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 0.99,
+        "probabilities": {
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 0.0,
+          "negative": 1.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval005",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval005",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 0.0,
+          "negative": 1.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.7,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval006",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval006",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "negative": 1.0,
+          "positive": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.97,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval007",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval007",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 1.0,
+          "unknown": 0.0,
+          "negative": 0.0,
+          "positive": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.92,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval008",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval008",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.94,
+        "probabilities": {
+          "negative": 0.04,
+          "mixed": 0.0,
+          "unknown": 0.0,
+          "positive": 0.0,
+          "neutral": 0.96
+        },
+        "intent": "question",
+        "intent_confidence": 0.98,
+        "style": "polite",
+        "style_confidence": 0.97,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval009",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval009",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.98,
+        "probabilities": {
+          "neutral": 0.98,
+          "mixed": 0.0,
+          "negative": 0.02,
+          "positive": 0.0,
+          "unknown": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.96,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval010",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval010",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.97,
+        "probabilities": {
+          "neutral": 0.98,
+          "mixed": 0.0,
+          "negative": 0.02,
+          "positive": 0.0,
+          "unknown": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.98,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval011",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval011",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.98,
+        "probabilities": {
+          "unknown": 0.01,
+          "neutral": 0.98,
+          "negative": 0.0,
+          "mixed": 0.0,
+          "positive": 0.01
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.98,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval012",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "sharing",
+          "support"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval012",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "unknown": 0.0,
+          "neutral": 0.0,
+          "negative": 0.0,
+          "mixed": 0.0,
+          "positive": 1.0
+        },
+        "intent": "support",
+        "intent_confidence": 0.97,
+        "style": "unknown",
+        "style_confidence": 0.36,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": null
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": null
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      }
+    },
+    {
+      "id": "eval013",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval013",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "unknown": 0.0,
+          "neutral": 0.0,
+          "negative": 0.0,
+          "mixed": 1.0,
+          "positive": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.9,
+        "style": "direct",
+        "style_confidence": 0.71,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval014",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "complaint",
+          "support",
+          "sharing"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval014",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "unknown": 0.0,
+          "neutral": 0.0,
+          "negative": 0.0,
+          "mixed": 1.0,
+          "positive": 0.0
+        },
+        "intent": "other",
+        "intent_confidence": 0.34,
+        "style": "polite",
+        "style_confidence": 0.6,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": null,
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": null,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      }
+    },
+    {
+      "id": "eval015",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "unknown",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval015",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.63,
+        "probabilities": {
+          "unknown": 0.71,
+          "neutral": 0.29,
+          "negative": 0.0,
+          "mixed": 0.0,
+          "positive": 0.0
+        },
+        "intent": "other",
+        "intent_confidence": 0.95,
+        "style": "direct",
+        "style_confidence": 0.55,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "other",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval016",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "unknown",
+          "playful"
+        ]
+      },
+      "actual": {
+        "message_id": "eval016",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.94,
+        "probabilities": {
+          "mixed": 0.0,
+          "unknown": 0.95,
+          "negative": 0.03,
+          "positive": 0.01,
+          "neutral": 0.01
+        },
+        "intent": "other",
+        "intent_confidence": 0.71,
+        "style": "unknown",
+        "style_confidence": 0.55,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "other",
+        "style": "unknown"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval017",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ],
+        "intent": [
+          "question",
+          "other"
+        ],
+        "style": [
+          "unknown",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval017",
+        "emotion": "unknown",
+        "original_emotion": "neutral",
+        "confidence": 0.47,
+        "probabilities": {
+          "unknown": 0.41,
+          "mixed": 0.0,
+          "negative": 0.01,
+          "positive": 0.0,
+          "neutral": 0.58
+        },
+        "intent": "question",
+        "intent_confidence": 0.94,
+        "style": "direct",
+        "style_confidence": 0.63,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval018",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral",
+          "negative"
+        ],
+        "intent": [
+          "other",
+          "coordination"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "eval018",
+        "emotion": "unknown",
+        "original_emotion": "negative",
+        "confidence": 0.4,
+        "probabilities": {
+          "unknown": 0.32,
+          "mixed": 0.0,
+          "negative": 0.52,
+          "positive": 0.0,
+          "neutral": 0.16
+        },
+        "intent": "other",
+        "intent_confidence": 0.49,
+        "style": "direct",
+        "style_confidence": 0.9,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": null,
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": null,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval019",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other",
+          "support",
+          "complaint"
+        ],
+        "style": [
+          "unknown",
+          "playful",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval019",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 0.78,
+        "probabilities": {
+          "unknown": 0.15,
+          "mixed": 0.01,
+          "negative": 0.83,
+          "positive": 0.0,
+          "neutral": 0.01
+        },
+        "intent": "complaint",
+        "intent_confidence": 0.98,
+        "style": "playful",
+        "style_confidence": 0.63,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "playful"
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval020",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "playful",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval020",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 0.89,
+        "probabilities": {
+          "unknown": 0.0,
+          "mixed": 0.09,
+          "negative": 0.91,
+          "positive": 0.0,
+          "neutral": 0.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "style": "unknown",
+        "style_confidence": 0.44,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": null
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": null
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      }
+    },
+    {
+      "id": "eval021",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval021",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.99,
+        "probabilities": {
+          "unknown": 0.0,
+          "negative": 0.0,
+          "neutral": 0.99,
+          "positive": 0.01,
+          "mixed": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.88,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval022",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval022",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.98,
+        "probabilities": {
+          "unknown": 0.0,
+          "negative": 0.01,
+          "neutral": 0.99,
+          "positive": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.99,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval023",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval023",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.93,
+        "probabilities": {
+          "unknown": 0.0,
+          "negative": 0.05,
+          "neutral": 0.95,
+          "mixed": 0.0,
+          "positive": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.97,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval024",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval024",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.9,
+        "probabilities": {
+          "unknown": 0.0,
+          "negative": 0.07,
+          "neutral": 0.93,
+          "positive": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "question",
+        "intent_confidence": 0.97,
+        "style": "polite",
+        "style_confidence": 0.8,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval025",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval025",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "unknown": 0.0,
+          "negative": 1.0,
+          "neutral": 0.0,
+          "mixed": 0.0,
+          "positive": 0.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.92,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval026",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "eval026",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.74,
+        "probabilities": {
+          "negative": 0.0,
+          "positive": 0.0,
+          "unknown": 0.79,
+          "mixed": 0.0,
+          "neutral": 0.21
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.83,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      }
+    },
+    {
+      "id": "eval027",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "eval027",
+        "emotion": "unknown",
+        "original_emotion": "neutral",
+        "confidence": 0.43,
+        "probabilities": {
+          "negative": 0.02,
+          "positive": 0.0,
+          "unknown": 0.43,
+          "mixed": 0.0,
+          "neutral": 0.55
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.77,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": false,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      }
+    },
+    {
+      "id": "eval028",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "eval028",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.37,
+        "probabilities": {
+          "negative": 0.01,
+          "positive": 0.0,
+          "unknown": 0.5,
+          "mixed": 0.0,
+          "neutral": 0.49
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.86,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": true,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      }
+    },
+    {
+      "id": "eval029",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval029",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 0.72,
+        "probabilities": {
+          "negative": 0.01,
+          "positive": 0.77,
+          "unknown": 0.07,
+          "mixed": 0.0,
+          "neutral": 0.15
+        },
+        "intent": "support",
+        "intent_confidence": 0.88,
+        "style": "polite",
+        "style_confidence": 0.8,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval030",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval030",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.83,
+        "probabilities": {
+          "negative": 0.0,
+          "positive": 0.13,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "neutral": 0.87
+        },
+        "intent": "question",
+        "intent_confidence": 0.91,
+        "style": "unknown",
+        "style_confidence": 0.36,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": null
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": null
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      }
+    },
+    {
+      "id": "eval031",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval031",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "positive": 0.0,
+          "negative": 1.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.99,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval032",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval032",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 1.0,
+          "positive": 0.0,
+          "negative": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.94,
+        "style": "direct",
+        "style_confidence": 0.98,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval033",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "playful"
+        ]
+      },
+      "actual": {
+        "message_id": "eval033",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 0.97,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.02,
+          "positive": 0.98,
+          "negative": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.98,
+        "style": "playful",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "sharing",
+        "style": "playful"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval034",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "eval034",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.96,
+        "probabilities": {
+          "neutral": 0.97,
+          "unknown": 0.0,
+          "mixed": 0.02,
+          "positive": 0.01,
+          "negative": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.99,
+        "style": "polite",
+        "style_confidence": 0.62,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval035",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval035",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.97,
+        "probabilities": {
+          "neutral": 0.97,
+          "unknown": 0.01,
+          "mixed": 0.0,
+          "positive": 0.0,
+          "negative": 0.02
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.99,
+        "style": "direct",
+        "style_confidence": 1.0,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "eval036",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "eval036",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.95,
+        "probabilities": {
+          "negative": 0.04,
+          "neutral": 0.95,
+          "mixed": 0.0,
+          "unknown": 0.01,
+          "positive": 0.0
+        },
+        "intent": "question",
+        "intent_confidence": 1.0,
+        "style": "direct",
+        "style_confidence": 0.97,
+        "needs_review": false,
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v1"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    }
+  ],
+  "offline_recomputed": true,
+  "limitation": "Small synthetic prewritten references; not real-user accuracy. Displayed agreement includes abstention. Raw agreement excludes unavailable original choices. Review flags indicate uncertainty or no match, not correctness."
+}

@@ -1,0 +1,858 @@
+{
+  "evaluation": "paired-choice-order-sensitivity",
+  "fictional": true,
+  "fixture": "order-probe.json",
+  "fixture_sha256": "37181c2a6e188a9f19b8dcf4b8da6e76e9e58dc01859cbd085a76d2668cddb35",
+  "model": "jev-1.13.0",
+  "prompt_version": "chatprint-v2",
+  "confidence_threshold": 0.55,
+  "paired_cases": 10,
+  "independent_of_main_evaluation": false,
+  "raw_choice_flips": {
+    "emotion": 0,
+    "intent": 0,
+    "style": 0
+  },
+  "displayed_choice_flips": {
+    "emotion": 1,
+    "intent": 0,
+    "style": 1
+  },
+  "dimension_review_flag_flips": {
+    "emotion": 1,
+    "intent": 0,
+    "style": 1
+  },
+  "overall_review_flag_flips": 1,
+  "cases_with_any_raw_flip": 0,
+  "cases_with_any_displayed_flip": 2,
+  "standard_metrics": {
+    "emotion": {
+      "agreed": 10,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 100.0,
+      "raw_agreed": 7,
+      "raw_available": 10,
+      "raw_agreement_percent": 70.0,
+      "decided": 6,
+      "unknown_or_other": 4,
+      "decision_coverage_percent": 60.0,
+      "low_confidence": 3,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    },
+    "intent": {
+      "agreed": 10,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 100.0,
+      "raw_agreed": 10,
+      "raw_available": 10,
+      "raw_agreement_percent": 100.0,
+      "decided": 7,
+      "unknown_or_other": 3,
+      "decision_coverage_percent": 70.0,
+      "low_confidence": 0,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    },
+    "style": {
+      "agreed": 10,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 100.0,
+      "raw_agreed": 10,
+      "raw_available": 10,
+      "raw_agreement_percent": 100.0,
+      "decided": 10,
+      "unknown_or_other": 0,
+      "decision_coverage_percent": 100.0,
+      "low_confidence": 0,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    }
+  },
+  "reverse_metrics": {
+    "emotion": {
+      "agreed": 9,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 90.0,
+      "raw_agreed": 7,
+      "raw_available": 10,
+      "raw_agreement_percent": 70.0,
+      "decided": 7,
+      "unknown_or_other": 3,
+      "decision_coverage_percent": 70.0,
+      "low_confidence": 2,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 85.7
+    },
+    "intent": {
+      "agreed": 10,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 100.0,
+      "raw_agreed": 10,
+      "raw_available": 10,
+      "raw_agreement_percent": 100.0,
+      "decided": 7,
+      "unknown_or_other": 3,
+      "decision_coverage_percent": 70.0,
+      "low_confidence": 0,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    },
+    "style": {
+      "agreed": 9,
+      "submitted": 10,
+      "valid_results": 10,
+      "agreement_percent": 90.0,
+      "raw_agreed": 10,
+      "raw_available": 10,
+      "raw_agreement_percent": 100.0,
+      "decided": 9,
+      "unknown_or_other": 1,
+      "decision_coverage_percent": 90.0,
+      "low_confidence": 1,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    }
+  },
+  "pairs": [
+    {
+      "id": "eval001",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "positive",
+          "displayed": "positive",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "support",
+          "displayed": "support",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "positive",
+          "displayed": "positive",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "support",
+          "displayed": "support",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "needs_review": false
+      }
+    },
+    {
+      "id": "eval003",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "positive",
+          "displayed": "positive",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "support",
+          "displayed": "support",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.85,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "positive",
+          "displayed": "positive",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "support",
+          "displayed": "support",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.89,
+          "needs_review": false
+        },
+        "needs_review": false
+      }
+    },
+    {
+      "id": "eval008",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "neutral",
+          "confidence": 0.97,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "question",
+          "displayed": "question",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "neutral",
+          "confidence": 0.96,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "question",
+          "displayed": "question",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "needs_review": false
+      }
+    },
+    {
+      "id": "eval014",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "complaint",
+          "support",
+          "sharing"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": true
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": true
+      },
+      "needs_review_flip": true,
+      "standard": {
+        "emotion": {
+          "raw": "mixed",
+          "displayed": "mixed",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 0.69,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.58,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "mixed",
+          "displayed": "mixed",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 0.64,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "unknown",
+          "confidence": 0.47,
+          "needs_review": true
+        },
+        "needs_review": true
+      }
+    },
+    {
+      "id": "eval019",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other",
+          "support",
+          "complaint"
+        ],
+        "style": [
+          "unknown",
+          "playful",
+          "direct"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "unknown",
+          "displayed": "unknown",
+          "confidence": 0.98,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 0.68,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "playful",
+          "displayed": "playful",
+          "confidence": 0.78,
+          "needs_review": false
+        },
+        "needs_review": true
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "unknown",
+          "displayed": "unknown",
+          "confidence": 0.98,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 0.58,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "playful",
+          "displayed": "playful",
+          "confidence": 0.82,
+          "needs_review": false
+        },
+        "needs_review": true
+      }
+    },
+    {
+      "id": "eval020",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "playful",
+          "direct"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "negative",
+          "displayed": "negative",
+          "confidence": 0.85,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "playful",
+          "displayed": "playful",
+          "confidence": 0.7,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "negative",
+          "displayed": "negative",
+          "confidence": 0.93,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "complaint",
+          "displayed": "complaint",
+          "confidence": 1.0,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "playful",
+          "displayed": "playful",
+          "confidence": 0.81,
+          "needs_review": false
+        },
+        "needs_review": false
+      }
+    },
+    {
+      "id": "eval026",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": true,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": true,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "unknown",
+          "confidence": 0.47,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.98,
+          "needs_review": false
+        },
+        "needs_review": true
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "neutral",
+          "confidence": 0.64,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 1.0,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.97,
+          "needs_review": false
+        },
+        "needs_review": true
+      }
+    },
+    {
+      "id": "eval027",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "unknown",
+          "confidence": 0.45,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 0.9,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.87,
+          "needs_review": false
+        },
+        "needs_review": true
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "unknown",
+          "confidence": 0.31,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 0.95,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.71,
+          "needs_review": false
+        },
+        "needs_review": true
+      }
+    },
+    {
+      "id": "eval028",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "unknown",
+          "confidence": 0.44,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 0.94,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.98,
+          "needs_review": false
+        },
+        "needs_review": true
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "unknown",
+          "confidence": 0.52,
+          "needs_review": true
+        },
+        "intent": {
+          "raw": "other",
+          "displayed": "other",
+          "confidence": 0.95,
+          "needs_review": true
+        },
+        "style": {
+          "raw": "direct",
+          "displayed": "direct",
+          "confidence": 0.93,
+          "needs_review": false
+        },
+        "needs_review": true
+      }
+    },
+    {
+      "id": "eval030",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "raw_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "displayed_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "dimension_review_flips": {
+        "emotion": false,
+        "intent": false,
+        "style": false
+      },
+      "needs_review_flip": false,
+      "standard": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "neutral",
+          "confidence": 0.93,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "question",
+          "displayed": "question",
+          "confidence": 0.98,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 0.98,
+          "needs_review": false
+        },
+        "needs_review": false
+      },
+      "reverse": {
+        "emotion": {
+          "raw": "neutral",
+          "displayed": "neutral",
+          "confidence": 0.96,
+          "needs_review": false
+        },
+        "intent": {
+          "raw": "question",
+          "displayed": "question",
+          "confidence": 0.99,
+          "needs_review": false
+        },
+        "style": {
+          "raw": "polite",
+          "displayed": "polite",
+          "confidence": 0.98,
+          "needs_review": false
+        },
+        "needs_review": false
+      }
+    }
+  ],
+  "limitation": "One pair of runs on a 10-case development-set subset. No repeated same-order control: option-order effects cannot be fully separated from service variability. Raw-label agreement does not imply probability or displayed-decision stability."
+}

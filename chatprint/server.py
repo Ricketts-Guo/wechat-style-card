@@ -15,7 +15,7 @@ from . import __version__
 from .analytics import make_report, summarize
 from .demo import make_demo
 from .importers import normalize_import
-from .jev import ENDPOINT, MODEL, JevClient, analyze_prepared, prepare_messages
+from .jev import ENDPOINT, MODEL, PROMPT_VERSION, JevClient, analyze_prepared, prepare_messages
 from . import wechat
 
 MAX_BODY = 30 * 1024 * 1024
@@ -32,7 +32,8 @@ class AppState:
 
     def settings(self) -> dict:
         with self.lock:
-            return {"configured": self.client is not None, "model": MODEL, "endpoint": ENDPOINT, "version": __version__}
+            return {"configured": self.client is not None, "model": MODEL, "endpoint": ENDPOINT, "version": __version__,
+                    "prompt_version": PROMPT_VERSION, "choice_order_supported": True}
 
     def configure(self, key: str) -> dict:
         if not isinstance(key, str) or len(key) > 4096:
@@ -43,7 +44,9 @@ class AppState:
             self.client = JevClient(key) if key.strip() else None
         return self.settings()
 
-    def start(self, prepared: list[dict]) -> str:
+    def start(self, prepared: list[dict], choice_order="standard") -> str:
+        if choice_order not in ("standard", "reverse"):
+            raise ValueError("选项顺序必须是 standard 或 reverse。")
         with self.lock:
             if not self.client:
                 raise ValueError("请先在 Jev 设置中填写你自己的 API Key。")
@@ -55,7 +58,8 @@ class AppState:
                 self.jobs.pop(next(iter(self.jobs)))
             job_id = secrets.token_urlsafe(18)
             job = {"status": "running", "completed": 0, "total": len(prepared), "analyses": [], "errors": [],
-                "usage": {"input_tokens": 0, "output_tokens": 0}, "models": [], "cancel_requested": False, "started_at": time.time()}
+                "usage": {"input_tokens": 0, "output_tokens": 0}, "models": [], "cancel_requested": False,
+                "choice_order": choice_order, "prompt_version": PROMPT_VERSION, "started_at": time.time()}
             self.jobs[job_id] = job
             client = self.client
 
@@ -65,7 +69,7 @@ class AppState:
                     job.update({k: v for k, v in result.items() if k != "cancelled"})
                     job["completed"] = len(job["analyses"]) + len(job["errors"])
             try:
-                result = analyze_prepared(client, prepared, progress=update, cancelled=lambda: job["cancel_requested"])
+                result = analyze_prepared(client, prepared, progress=update, cancelled=lambda: job["cancel_requested"], choice_order=choice_order)
                 update(result)
                 with self.lock:
                     job["status"] = "cancelled" if result.get("cancelled") else ("failed" if not result["analyses"] and result["errors"] else "completed")
@@ -107,16 +111,18 @@ class AppState:
                 raise ValueError("选择包含预览之外的消息，请重新预览。")
             return [m for m in snapshot["messages"] if m["id"] in wanted]
 
-    def start_approved(self, preview_id, selected_ids):
+    def start_approved(self, preview_id, selected_ids, choice_order="standard"):
         # A lost HTTP response or repeated click must not start a second paid job.
+        if choice_order not in ("standard", "reverse"):
+            raise ValueError("选项顺序必须是 standard 或 reverse。")
         with self.lock:
             chosen = self.approved(preview_id, selected_ids)
             snapshot = self.previews[preview_id]
-            selection = tuple(sorted(set(selected_ids)))
+            selection = (choice_order, tuple(sorted(set(selected_ids))))
             previous = snapshot.setdefault("jobs", {}).get(selection)
             if previous in self.jobs:
                 return previous, len(chosen)
-            job_id = self.start(chosen)
+            job_id = self.start(chosen) if choice_order == "standard" else self.start(chosen, choice_order=choice_order)
             snapshot["jobs"][selection] = job_id
             return job_id, len(chosen)
 
@@ -250,10 +256,12 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(preview)
                 else:
                     if "preview_id" in body:
-                        job_id, selected = self.server.state.start_approved(body["preview_id"], body.get("selected_ids"))
+                        job_id, selected = self.server.state.start_approved(body["preview_id"], body.get("selected_ids"), body.get("choice_order", "standard"))
                     else:
                         chosen = prepare_messages(_messages(body), body.get("limit", 30), anonymize=True)["messages"]
-                        job_id, selected = self.server.state.start(chosen), len(chosen)
+                        order = body.get("choice_order", "standard")
+                        job_id = self.server.state.start(chosen) if order == "standard" else self.server.state.start(chosen, choice_order=order)
+                        selected = len(chosen)
                     self._json({"job_id": job_id, "selected": selected}, 202)
             elif path.startswith("/api/jobs/") and path.endswith("/cancel"):
                 job_id = path.split("/")[-2]

@@ -1,0 +1,184 @@
+{
+  "evaluation": "combined-v2-synthetic-reference-summary",
+  "model": "jev-1.13.0",
+  "prompt_version": "chatprint-v2",
+  "choice_order": "standard",
+  "confidence_threshold": 0.55,
+  "fixtures": [
+    {
+      "fixture": "jev_eval.json",
+      "sha256": "2c689df236bd851ed3a608ae097bdf80c33399d47a1f993289dcadfabf6fc876",
+      "cases": 36
+    },
+    {
+      "fixture": "jev_holdout.json",
+      "sha256": "b5d3bbc0478e36349984224f9d2a01499e7ecf87474c14a1f2416d7ead9d3803",
+      "cases": 24
+    }
+  ],
+  "distinct_cases": 60,
+  "metrics": {
+    "emotion": {
+      "agreed": 58,
+      "submitted": 60,
+      "valid_results": 60,
+      "agreement_percent": 96.7,
+      "raw_agreed": 56,
+      "raw_available": 60,
+      "raw_agreement_percent": 93.3,
+      "decided": 49,
+      "unknown_or_other": 11,
+      "decision_coverage_percent": 81.7,
+      "low_confidence": 6,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 95.9
+    },
+    "intent": {
+      "agreed": 58,
+      "submitted": 60,
+      "valid_results": 60,
+      "agreement_percent": 96.7,
+      "raw_agreed": 58,
+      "raw_available": 60,
+      "raw_agreement_percent": 96.7,
+      "decided": 49,
+      "unknown_or_other": 11,
+      "decision_coverage_percent": 81.7,
+      "low_confidence": 4,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 98.0
+    },
+    "style": {
+      "agreed": 57,
+      "submitted": 60,
+      "valid_results": 60,
+      "agreement_percent": 95.0,
+      "raw_agreed": 60,
+      "raw_available": 60,
+      "raw_agreement_percent": 100.0,
+      "decided": 52,
+      "unknown_or_other": 8,
+      "decision_coverage_percent": 86.7,
+      "low_confidence": 7,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    }
+  },
+  "usage": {
+    "input_tokens": 65341,
+    "output_tokens": 9803
+  },
+  "requests": 13,
+  "cached_requests": 0,
+  "service_errors": 0,
+  "displayed_disagreement_cases": 6,
+  "displayed_disagreement_needs_review": 6,
+  "unflagged_displayed_disagreement_cases": 0,
+  "disagreements": [
+    {
+      "id": "eval007",
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "style"
+      ]
+    },
+    {
+      "id": "eval014",
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": false
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "intent",
+        "style"
+      ]
+    },
+    {
+      "id": "eval020",
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": false
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "style"
+      ]
+    },
+    {
+      "id": "eval027",
+      "agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "intent"
+      ]
+    },
+    {
+      "id": "holdout019",
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "emotion",
+        "style"
+      ]
+    },
+    {
+      "id": "holdout024",
+      "agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "needs_review": true,
+      "review_dimensions": [
+        "intent"
+      ]
+    }
+  ],
+  "limitation": "Prewritten synthetic references observed in development; not a pristine unseen holdout or real-user accuracy estimate. Review flags do not constitute correct classification."
+}

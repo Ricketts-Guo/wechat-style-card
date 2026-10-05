@@ -1,0 +1,1777 @@
+{
+  "evaluation": "synthetic-reference-agreement",
+  "date_utc": "2026-10-05T10:12:17.755712+00:00",
+  "fixture": "jev_holdout.json",
+  "fixture_sha256": "b5d3bbc0478e36349984224f9d2a01499e7ecf87474c14a1f2416d7ead9d3803",
+  "fixture_hash_provenance": "captured_at_run",
+  "fixture_metadata": {
+    "name": "ChatPrint independently written Chinese fictional holdout",
+    "version": 1,
+    "fictional": true,
+    "case_count": 24,
+    "reference_locked_before_api_results": true,
+    "description": "与首套评估集不同的二十四条全新虚构中文案例。参考标签在查看本套真实模型结果之前独立编写。每条采用独立聊天，只有显式 preceding_context 可辅助解释。",
+    "metric": "reference_consistency",
+    "metric_note": "只能衡量模型与本套人工合成参考标签的一致程度，不能作为真实微信人群准确率或人格判断准确率。",
+    "ambiguity_note": "每个 expected 字段是预先确定的允许标签集合。确有语义歧义时列出多个标签并解释理由；不得根据模型输出事后扩充集合。",
+    "label_scope": "判断目标 text 中发送者自己的情绪表达、主要意图和文字风格；不把引用或前文他人的感受归给发送者。",
+    "emotion_labels": [
+      "positive",
+      "negative",
+      "neutral",
+      "mixed",
+      "unknown"
+    ],
+    "intent_labels": [
+      "support",
+      "question",
+      "coordination",
+      "sharing",
+      "complaint",
+      "other"
+    ],
+    "style_labels": [
+      "playful",
+      "polite",
+      "direct",
+      "unknown"
+    ]
+  },
+  "evaluated_cases": 24,
+  "choice_order": "standard",
+  "choice_order_provenance": "captured_at_run",
+  "prompt_version": "chatprint-v2",
+  "models": [
+    "jev-1.13.0"
+  ],
+  "confidence_threshold": 0.55,
+  "metrics": {
+    "emotion": {
+      "agreed": 23,
+      "submitted": 24,
+      "valid_results": 24,
+      "agreement_percent": 95.8,
+      "raw_agreed": 22,
+      "raw_available": 24,
+      "raw_agreement_percent": 91.7,
+      "decided": 20,
+      "unknown_or_other": 4,
+      "decision_coverage_percent": 83.3,
+      "low_confidence": 1,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 95.0
+    },
+    "intent": {
+      "agreed": 23,
+      "submitted": 24,
+      "valid_results": 24,
+      "agreement_percent": 95.8,
+      "raw_agreed": 23,
+      "raw_available": 24,
+      "raw_agreement_percent": 95.8,
+      "decided": 20,
+      "unknown_or_other": 4,
+      "decision_coverage_percent": 83.3,
+      "low_confidence": 1,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 95.0
+    },
+    "style": {
+      "agreed": 24,
+      "submitted": 24,
+      "valid_results": 24,
+      "agreement_percent": 100.0,
+      "raw_agreed": 24,
+      "raw_available": 24,
+      "raw_agreement_percent": 100.0,
+      "decided": 21,
+      "unknown_or_other": 3,
+      "decision_coverage_percent": 87.5,
+      "low_confidence": 3,
+      "confidence_unavailable": 0,
+      "decided_agreement_percent": 100.0
+    }
+  },
+  "usage": {
+    "input_tokens": 26164,
+    "output_tokens": 3922
+  },
+  "requests": 5,
+  "cached_requests": 0,
+  "errors": [],
+  "elapsed_seconds": 3.22,
+  "comparisons": [
+    {
+      "id": "holdout001",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout001",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "support",
+        "intent_confidence": 1.0,
+        "original_intent": "support",
+        "intent_probabilities": {
+          "question": 0.0,
+          "sharing": 0.0,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "other": 0.0,
+          "support": 1.0
+        },
+        "style": "polite",
+        "style_confidence": 1.0,
+        "original_style": "polite",
+        "style_probabilities": {
+          "direct": 0.0,
+          "unknown": 0.0,
+          "polite": 1.0,
+          "playful": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout002",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout002",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 1.0,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "question": 0.0,
+          "sharing": 1.0,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "other": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.96,
+        "original_style": "direct",
+        "style_probabilities": {
+          "direct": 0.97,
+          "unknown": 0.0,
+          "polite": 0.0,
+          "playful": 0.03
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout003",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "support"
+        ],
+        "style": [
+          "polite",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout003",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "support",
+        "intent_confidence": 1.0,
+        "original_intent": "support",
+        "intent_probabilities": {
+          "other": 0.0,
+          "sharing": 0.0,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "question": 0.0,
+          "support": 1.0
+        },
+        "style": "direct",
+        "style_confidence": 0.59,
+        "original_style": "direct",
+        "style_probabilities": {
+          "direct": 0.69,
+          "unknown": 0.0,
+          "polite": 0.3,
+          "playful": 0.01
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "support",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout004",
+      "reference": {
+        "emotion": [
+          "positive"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "playful"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout004",
+        "emotion": "positive",
+        "original_emotion": "positive",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "positive": 1.0,
+          "negative": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 1.0,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "other": 0.0,
+          "sharing": 1.0,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "question": 0.0,
+          "support": 0.0
+        },
+        "style": "playful",
+        "style_confidence": 1.0,
+        "original_style": "playful",
+        "style_probabilities": {
+          "direct": 0.0,
+          "unknown": 0.0,
+          "polite": 0.0,
+          "playful": 1.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "positive",
+        "intent": "sharing",
+        "style": "playful"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout005",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout005",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "unknown": 0.0,
+          "mixed": 0.0,
+          "negative": 1.0,
+          "positive": 0.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "original_intent": "complaint",
+        "intent_probabilities": {
+          "other": 0.0,
+          "sharing": 0.0,
+          "coordination": 0.0,
+          "complaint": 1.0,
+          "question": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "direct": 1.0,
+          "unknown": 0.0,
+          "polite": 0.0,
+          "playful": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout006",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout006",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "positive": 0.0,
+          "negative": 1.0,
+          "unknown": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.96,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "sharing": 0.97,
+          "other": 0.0,
+          "question": 0.0,
+          "coordination": 0.0,
+          "complaint": 0.03,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.0,
+          "direct": 1.0,
+          "polite": 0.0,
+          "unknown": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout007",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout007",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 1.0,
+        "probabilities": {
+          "neutral": 0.0,
+          "positive": 0.0,
+          "negative": 1.0,
+          "unknown": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "original_intent": "complaint",
+        "intent_probabilities": {
+          "sharing": 0.0,
+          "question": 0.0,
+          "complaint": 1.0,
+          "coordination": 0.0,
+          "other": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.0,
+          "direct": 1.0,
+          "polite": 0.0,
+          "unknown": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout008",
+      "reference": {
+        "emotion": [
+          "negative"
+        ],
+        "intent": [
+          "complaint"
+        ],
+        "style": [
+          "playful",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout008",
+        "emotion": "negative",
+        "original_emotion": "negative",
+        "confidence": 0.99,
+        "probabilities": {
+          "neutral": 0.0,
+          "positive": 0.0,
+          "negative": 0.99,
+          "unknown": 0.0,
+          "mixed": 0.01
+        },
+        "intent": "complaint",
+        "intent_confidence": 1.0,
+        "original_intent": "complaint",
+        "intent_probabilities": {
+          "sharing": 0.0,
+          "other": 0.0,
+          "question": 0.0,
+          "coordination": 0.0,
+          "complaint": 1.0,
+          "support": 0.0
+        },
+        "style": "playful",
+        "style_confidence": 0.6,
+        "original_style": "playful",
+        "style_probabilities": {
+          "playful": 0.7,
+          "direct": 0.29,
+          "polite": 0.0,
+          "unknown": 0.01
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "negative",
+        "intent": "complaint",
+        "style": "playful"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout009",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout009",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.93,
+        "probabilities": {
+          "neutral": 0.94,
+          "positive": 0.0,
+          "negative": 0.05,
+          "unknown": 0.01,
+          "mixed": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.98,
+        "original_intent": "coordination",
+        "intent_probabilities": {
+          "sharing": 0.0,
+          "question": 0.0,
+          "complaint": 0.01,
+          "coordination": 0.99,
+          "other": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.97,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.01,
+          "direct": 0.98,
+          "polite": 0.01,
+          "unknown": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout010",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout010",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.99,
+        "probabilities": {
+          "neutral": 0.99,
+          "positive": 0.0,
+          "negative": 0.01,
+          "unknown": 0.0,
+          "mixed": 0.0
+        },
+        "intent": "question",
+        "intent_confidence": 0.99,
+        "original_intent": "question",
+        "intent_probabilities": {
+          "sharing": 0.0,
+          "other": 0.0,
+          "question": 0.99,
+          "coordination": 0.01,
+          "complaint": 0.0,
+          "support": 0.0
+        },
+        "style": "polite",
+        "style_confidence": 0.91,
+        "original_style": "polite",
+        "style_probabilities": {
+          "playful": 0.0,
+          "direct": 0.07,
+          "polite": 0.93,
+          "unknown": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout011",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout011",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.98,
+        "probabilities": {
+          "unknown": 0.0,
+          "positive": 0.0,
+          "mixed": 0.0,
+          "negative": 0.01,
+          "neutral": 0.99
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.98,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "sharing": 0.99,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "other": 0.01,
+          "question": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.0,
+          "direct": 1.0,
+          "polite": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout012",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout012",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.99,
+        "probabilities": {
+          "unknown": 0.0,
+          "positive": 0.0,
+          "mixed": 0.0,
+          "negative": 0.01,
+          "neutral": 0.99
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.96,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "question": 0.0,
+          "coordination": 0.03,
+          "sharing": 0.97,
+          "other": 0.0,
+          "complaint": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.0,
+          "direct": 1.0,
+          "polite": 0.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout013",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout013",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.9,
+        "probabilities": {
+          "unknown": 0.01,
+          "positive": 0.0,
+          "negative": 0.07,
+          "neutral": 0.92,
+          "mixed": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 0.98,
+        "original_intent": "coordination",
+        "intent_probabilities": {
+          "sharing": 0.01,
+          "coordination": 0.98,
+          "complaint": 0.0,
+          "other": 0.01,
+          "question": 0.0,
+          "support": 0.0
+        },
+        "style": "polite",
+        "style_confidence": 0.88,
+        "original_style": "polite",
+        "style_probabilities": {
+          "playful": 0.0,
+          "unknown": 0.0,
+          "direct": 0.09,
+          "polite": 0.91
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout014",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "coordination"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout014",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.94,
+        "probabilities": {
+          "unknown": 0.0,
+          "positive": 0.05,
+          "negative": 0.0,
+          "neutral": 0.95,
+          "mixed": 0.0
+        },
+        "intent": "coordination",
+        "intent_confidence": 1.0,
+        "original_intent": "coordination",
+        "intent_probabilities": {
+          "question": 0.0,
+          "coordination": 1.0,
+          "sharing": 0.0,
+          "other": 0.0,
+          "complaint": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.97,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.0,
+          "direct": 0.98,
+          "polite": 0.02
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "coordination",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout015",
+      "reference": {
+        "emotion": [
+          "neutral"
+        ],
+        "intent": [
+          "question"
+        ],
+        "style": [
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout015",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.94,
+        "probabilities": {
+          "unknown": 0.01,
+          "positive": 0.03,
+          "negative": 0.0,
+          "neutral": 0.96,
+          "mixed": 0.0
+        },
+        "intent": "question",
+        "intent_confidence": 0.99,
+        "original_intent": "question",
+        "intent_probabilities": {
+          "sharing": 0.0,
+          "coordination": 0.0,
+          "complaint": 0.0,
+          "other": 0.0,
+          "question": 1.0,
+          "support": 0.0
+        },
+        "style": "polite",
+        "style_confidence": 0.77,
+        "original_style": "polite",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.0,
+          "direct": 0.17,
+          "polite": 0.83
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "question",
+        "style": "polite"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout016",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout016",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "positive": 0.0,
+          "unknown": 0.0,
+          "mixed": 1.0,
+          "negative": 0.0,
+          "neutral": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 1.0,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "coordination": 0.0,
+          "support": 0.0,
+          "other": 0.0,
+          "complaint": 0.0,
+          "sharing": 1.0,
+          "question": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.0,
+          "unknown": 0.0,
+          "polite": 0.0,
+          "direct": 1.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout017",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "sharing",
+          "support",
+          "complaint"
+        ],
+        "style": [
+          "direct",
+          "polite"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout017",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "positive": 0.0,
+          "unknown": 0.0,
+          "mixed": 1.0,
+          "negative": 0.0,
+          "neutral": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.57,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "coordination": 0.0,
+          "support": 0.28,
+          "other": 0.01,
+          "complaint": 0.07,
+          "sharing": 0.64,
+          "question": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.73,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.0,
+          "unknown": 0.0,
+          "polite": 0.2,
+          "direct": 0.8
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout018",
+      "reference": {
+        "emotion": [
+          "mixed"
+        ],
+        "intent": [
+          "sharing"
+        ],
+        "style": [
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout018",
+        "emotion": "mixed",
+        "original_emotion": "mixed",
+        "confidence": 1.0,
+        "probabilities": {
+          "positive": 0.0,
+          "unknown": 0.0,
+          "mixed": 1.0,
+          "negative": 0.0,
+          "neutral": 0.0
+        },
+        "intent": "sharing",
+        "intent_confidence": 0.99,
+        "original_intent": "sharing",
+        "intent_probabilities": {
+          "coordination": 0.0,
+          "support": 0.0,
+          "other": 0.0,
+          "complaint": 0.0,
+          "question": 0.0,
+          "sharing": 1.0
+        },
+        "style": "direct",
+        "style_confidence": 1.0,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.0,
+          "unknown": 0.0,
+          "polite": 0.0,
+          "direct": 1.0
+        },
+        "needs_review": false,
+        "review_dimensions": [],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "mixed",
+        "intent": "sharing",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout019",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "unknown",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout019",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.69,
+        "probabilities": {
+          "positive": 0.0,
+          "unknown": 0.75,
+          "mixed": 0.01,
+          "negative": 0.01,
+          "neutral": 0.23
+        },
+        "intent": "question",
+        "intent_confidence": 0.6,
+        "original_intent": "question",
+        "intent_probabilities": {
+          "coordination": 0.0,
+          "support": 0.0,
+          "other": 0.29,
+          "complaint": 0.01,
+          "sharing": 0.04,
+          "question": 0.66
+        },
+        "style": "unknown",
+        "style_confidence": 0.35,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.01,
+          "unknown": 0.48,
+          "polite": 0.0,
+          "direct": 0.51
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "emotion",
+          "style"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "question",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": false,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout020",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral"
+        ],
+        "intent": [
+          "question",
+          "other"
+        ],
+        "style": [
+          "unknown",
+          "direct",
+          "playful"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout020",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.87,
+        "probabilities": {
+          "positive": 0.0,
+          "unknown": 0.9,
+          "mixed": 0.0,
+          "negative": 0.03,
+          "neutral": 0.07
+        },
+        "intent": "question",
+        "intent_confidence": 0.93,
+        "original_intent": "question",
+        "intent_probabilities": {
+          "coordination": 0.0,
+          "support": 0.0,
+          "other": 0.05,
+          "complaint": 0.0,
+          "sharing": 0.0,
+          "question": 0.95
+        },
+        "style": "unknown",
+        "style_confidence": 0.41,
+        "original_style": "direct",
+        "style_probabilities": {
+          "playful": 0.06,
+          "unknown": 0.38,
+          "polite": 0.0,
+          "direct": 0.56
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "emotion",
+          "style"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "question",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout021",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other",
+          "support",
+          "complaint"
+        ],
+        "style": [
+          "unknown",
+          "playful",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout021",
+        "emotion": "unknown",
+        "original_emotion": "unknown",
+        "confidence": 0.95,
+        "probabilities": {
+          "unknown": 0.96,
+          "negative": 0.01,
+          "positive": 0.02,
+          "neutral": 0.0,
+          "mixed": 0.01
+        },
+        "intent": "other",
+        "intent_confidence": 0.38,
+        "original_intent": "support",
+        "intent_probabilities": {
+          "complaint": 0.31,
+          "coordination": 0.0,
+          "other": 0.19,
+          "question": 0.0,
+          "sharing": 0.01,
+          "support": 0.49
+        },
+        "style": "unknown",
+        "style_confidence": 0.53,
+        "original_style": "playful",
+        "style_probabilities": {
+          "unknown": 0.04,
+          "playful": 0.65,
+          "direct": 0.28,
+          "polite": 0.03
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "emotion",
+          "intent",
+          "style"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "unknown",
+        "intent": "support",
+        "style": "playful"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout022",
+      "reference": {
+        "emotion": [
+          "unknown",
+          "neutral",
+          "negative"
+        ],
+        "intent": [
+          "other",
+          "coordination"
+        ],
+        "style": [
+          "unknown",
+          "direct"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout022",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.64,
+        "probabilities": {
+          "unknown": 0.24,
+          "negative": 0.04,
+          "positive": 0.0,
+          "neutral": 0.72,
+          "mixed": 0.0
+        },
+        "intent": "other",
+        "intent_confidence": 0.65,
+        "original_intent": "other",
+        "intent_probabilities": {
+          "coordination": 0.23,
+          "complaint": 0.04,
+          "other": 0.72,
+          "question": 0.0,
+          "sharing": 0.01,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.98,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.01,
+          "direct": 0.99,
+          "polite": 0.0
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "intent"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "other",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout023",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout023",
+        "emotion": "unknown",
+        "original_emotion": "neutral",
+        "confidence": 0.39,
+        "probabilities": {
+          "unknown": 0.46,
+          "negative": 0.01,
+          "positive": 0.02,
+          "neutral": 0.51,
+          "mixed": 0.0
+        },
+        "intent": "other",
+        "intent_confidence": 0.99,
+        "original_intent": "other",
+        "intent_probabilities": {
+          "coordination": 0.01,
+          "complaint": 0.0,
+          "other": 0.99,
+          "sharing": 0.0,
+          "question": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.93,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.01,
+          "playful": 0.03,
+          "direct": 0.95,
+          "polite": 0.01
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "emotion",
+          "intent"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "other",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": true,
+        "intent": true,
+        "style": true
+      }
+    },
+    {
+      "id": "holdout024",
+      "reference": {
+        "emotion": [
+          "unknown"
+        ],
+        "intent": [
+          "other"
+        ],
+        "style": [
+          "direct",
+          "unknown"
+        ]
+      },
+      "actual": {
+        "message_id": "holdout024",
+        "emotion": "neutral",
+        "original_emotion": "neutral",
+        "confidence": 0.58,
+        "probabilities": {
+          "unknown": 0.32,
+          "negative": 0.01,
+          "positive": 0.0,
+          "neutral": 0.67,
+          "mixed": 0.0
+        },
+        "intent": "other",
+        "intent_confidence": 1.0,
+        "original_intent": "other",
+        "intent_probabilities": {
+          "complaint": 0.0,
+          "coordination": 0.0,
+          "other": 1.0,
+          "question": 0.0,
+          "sharing": 0.0,
+          "support": 0.0
+        },
+        "style": "direct",
+        "style_confidence": 0.99,
+        "original_style": "direct",
+        "style_probabilities": {
+          "unknown": 0.0,
+          "playful": 0.0,
+          "direct": 1.0,
+          "polite": 0.0
+        },
+        "needs_review": true,
+        "review_dimensions": [
+          "intent"
+        ],
+        "source": "jev",
+        "model": "jev-1.13.0",
+        "prompt_version": "chatprint-v2",
+        "choice_order": "standard"
+      },
+      "raw_labels": {
+        "emotion": "neutral",
+        "intent": "other",
+        "style": "direct"
+      },
+      "raw_agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      },
+      "agreement": {
+        "emotion": false,
+        "intent": true,
+        "style": true
+      }
+    }
+  ],
+  "offline_recomputed": true,
+  "limitation": "Small synthetic prewritten references; not real-user accuracy. Displayed agreement includes abstention. Raw agreement excludes unavailable original choices. Review flags indicate uncertainty or no match, not correctness."
+}

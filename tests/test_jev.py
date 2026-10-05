@@ -142,6 +142,29 @@ class PreparationTests(unittest.TestCase):
         self.assertEqual(jev.prepare_messages([])["selected"], 0)
         self.assertEqual(jev.build_payload([])["questions"], {})
 
+    def test_reverse_order_changes_only_criteria_key_order(self):
+        prepared = prepared_messages(2)
+        standard = jev.build_payload(prepared)
+        reverse = jev.build_payload(prepared, choice_order="reverse")
+        self.assertEqual(standard, reverse)
+        for name, question in standard["questions"].items():
+            self.assertEqual(list(reverse["questions"][name]["criteria"]), list(reversed(question["criteria"])))
+        self.assertEqual(list(jev.EMOTIONS), ["positive", "negative", "neutral", "mixed", "unknown"])
+        self.assertEqual(list(jev.INTENTS), ["support", "question", "coordination", "sharing", "complaint", "other"])
+        self.assertEqual(list(jev.STYLES), ["playful", "polite", "direct", "unknown"])
+
+    def test_invalid_choice_order_is_rejected_before_paid_requests(self):
+        client = mock.Mock(model=jev.MODEL)
+        for order in (None, True, 1, "", "random", [], {}):
+            with self.subTest(order=order):
+                with self.assertRaises(ValueError):
+                    jev.build_payload([], choice_order=order)
+                with self.assertRaises(ValueError):
+                    jev.decode_response({}, [], choice_order=order)
+                with self.assertRaises(ValueError):
+                    jev.analyze_prepared(client, [], choice_order=order)
+        client.evaluate.assert_not_called()
+
 
 class ResponseValidationTests(unittest.TestCase):
     def setUp(self):
@@ -153,19 +176,82 @@ class ResponseValidationTests(unittest.TestCase):
         self.assertEqual(result["emotion"], "positive")
         self.assertEqual(result["message_id"], "1")
         self.assertEqual(result["model"], "jev-1.13.0")
+        self.assertEqual(result["choice_order"], "standard")
         self.assertFalse(result["needs_review"])
+        self.assertEqual(result["review_dimensions"], [])
+        self.assertEqual(result["original_intent"], "support")
+        self.assertEqual(result["original_style"], "polite")
         self.assertAlmostEqual(sum(result["probabilities"].values()), 1)
+        for dimension in ("intent", "style"):
+            self.assertEqual(result[f"{dimension}_probabilities"], self.good["answers"][f"m0_{dimension}"]["probabilities"])
 
     def test_low_confidence_becomes_unknown_instead_of_neutral(self):
         result = jev.decode_response(response_for(self.prepared, top=.35), self.prepared)[0]
         self.assertEqual(result["emotion"], "unknown")
         self.assertEqual(result["original_emotion"], "positive")
         self.assertTrue(result["needs_review"])
+        self.assertEqual(result["review_dimensions"], ["emotion"])
 
     def test_explicit_unknown_is_marked_for_review(self):
         result = jev.decode_response(response_for(self.prepared, emotion="unknown"), self.prepared)[0]
         self.assertEqual(result["emotion"], "unknown")
         self.assertTrue(result["needs_review"])
+        self.assertEqual(result["review_dimensions"], ["emotion"])
+
+    def test_uncertain_intent_or_style_requests_review_when_emotion_is_clear(self):
+        for dimension, options, label, fallback in (
+            ("intent", jev.INTENTS, "support", "other"),
+            ("style", jev.STYLES, "polite", "unknown"),
+        ):
+            data = copy.deepcopy(self.good)
+            data["answers"][f"m0_{dimension}"] = choice(options, label, top=.40)
+            with self.subTest(dimension=dimension):
+                result = jev.decode_response(data, self.prepared)[0]
+                self.assertEqual(result["emotion"], "positive")
+                self.assertEqual(result[dimension], fallback)
+                self.assertTrue(result["needs_review"])
+                self.assertEqual(result["review_dimensions"], [dimension])
+                self.assertEqual(result[f"original_{dimension}"], label)
+                self.assertEqual(result[f"{dimension}_probabilities"], data["answers"][f"m0_{dimension}"]["probabilities"])
+
+    def test_high_confidence_no_match_intent_or_unknown_style_requests_review(self):
+        for dimension, options, label in (
+            ("intent", jev.INTENTS, "other"),
+            ("style", jev.STYLES, "unknown"),
+        ):
+            data = copy.deepcopy(self.good)
+            data["answers"][f"m0_{dimension}"] = choice(options, label)
+            with self.subTest(dimension=dimension):
+                result = jev.decode_response(data, self.prepared)[0]
+                self.assertTrue(result["needs_review"])
+                self.assertEqual(result["review_dimensions"], [dimension])
+
+    def test_all_uncertain_dimensions_are_retained_for_offline_threshold_review(self):
+        data = copy.deepcopy(self.good)
+        for dimension, options, label in (
+            ("emotion", jev.EMOTIONS, "positive"),
+            ("intent", jev.INTENTS, "support"),
+            ("style", jev.STYLES, "polite"),
+        ):
+            data["answers"][f"m0_{dimension}"] = choice(options, label, top=.40)
+        result = jev.decode_response(data, self.prepared)[0]
+        self.assertEqual([result[dimension] for dimension in ("emotion", "intent", "style")], ["unknown", "other", "unknown"])
+        self.assertEqual(result["review_dimensions"], ["emotion", "intent", "style"])
+        self.assertEqual([result[f"original_{dimension}"] for dimension in ("emotion", "intent", "style")], ["positive", "support", "polite"])
+        self.assertEqual(result["prompt_version"], "chatprint-v2")
+
+    def test_reverse_order_answers_remain_attached_to_their_named_labels_and_messages(self):
+        prepared = prepared_messages(2)
+        data = response_for(prepared)
+        data["answers"]["m1_emotion"] = choice(jev.EMOTIONS, "negative")
+        data["answers"]["m1_intent"] = choice(jev.INTENTS, "complaint")
+        data["answers"]["m1_style"] = choice(jev.STYLES, "direct")
+        for answer in data["answers"].values():
+            answer["probabilities"] = dict(reversed(list(answer["probabilities"].items())))
+        rows = jev.decode_response(data, prepared, choice_order="reverse")
+        self.assertEqual([(r["message_id"], r["emotion"], r["intent"], r["style"]) for r in rows],
+                         [("1", "positive", "support", "polite"), ("2", "negative", "complaint", "direct")])
+        self.assertEqual([row["choice_order"] for row in rows], ["reverse", "reverse"])
 
     def test_invalid_probability_and_confidence_numbers_are_rejected(self):
         for value in (True, -0.01, 1.01, float("nan"), float("inf"), "0.9", None):
@@ -235,6 +321,29 @@ class ClientTests(unittest.TestCase):
         sleeping.assert_called_once_with(2.0)
         self.assertEqual(result["answers"], cached["answers"])
         self.assertTrue(cached["cached"])
+
+    def test_standard_and_reverse_choice_orders_do_not_share_cached_answers(self):
+        client = jev.JevClient(self.key)
+        reverse = jev.build_payload(self.prepared, choice_order="reverse")
+        with mock.patch.object(jev, "_open_request", side_effect=[JsonResponse(self.good), JsonResponse(self.good)]) as opening:
+            standard_result = client.evaluate(self.payload)
+            reverse_result = client.evaluate(reverse)
+            cached_reverse = client.evaluate(reverse)
+        self.assertEqual(opening.call_count, 2)
+        self.assertFalse(standard_result.get("cached", False))
+        self.assertFalse(reverse_result.get("cached", False))
+        self.assertTrue(cached_reverse["cached"])
+
+    def test_reverse_order_analysis_preserves_usage_and_records_experiment_order(self):
+        client = mock.Mock(model=jev.MODEL)
+        client.evaluate.return_value = self.good
+        result = jev.analyze_prepared(client, self.prepared, choice_order="reverse")
+        self.assertEqual(result["errors"], [])
+        self.assertEqual(result["usage"], {"input_tokens": 100, "output_tokens": 10})
+        self.assertEqual(result["requests"], 1)
+        self.assertEqual(result["analyses"][0]["choice_order"], "reverse")
+        sent = client.evaluate.call_args.args[0]
+        self.assertEqual(list(sent["questions"]["m0_emotion"]["criteria"]), list(reversed(jev.EMOTIONS)))
 
     def test_retry_after_milliseconds_is_honored(self):
         with mock.patch.object(jev, "_open_request", side_effect=[http_error(429, {"retry-after-ms": "2500"}), JsonResponse(self.good)]), mock.patch.object(jev.time, "sleep") as sleeping:

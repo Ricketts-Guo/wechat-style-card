@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "flow": "import/redaction/preview-selection/real-Jev-job/idempotency/skip-context/three-dimension-correction/anonymous-export/filter/mobile/no-XSS/no-outside-browser-request/no-storage",
+  "provider": "real-TypeSafe-Jev",
+  "models": [
+    "jev-1.13.0"
+  ],
+  "prompt_version": "chatprint-v2",
+  "submitted": 2,
+  "requests": 1,
+  "cached_requests": 0,
+  "usage": {
+    "input_tokens": 2374,
+    "output_tokens": 329
+  },
+  "errors": [],
+  "js_errors": 0,
+  "external_browser_requests": 0,
+  "limitation": "Two synthetic UI texts; functional integration evidence, not an accuracy estimate."
+}

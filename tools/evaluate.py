@@ -6,7 +6,9 @@ Reference agreement measures this small fixture, not real-world accuracy.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import math
 import sys
 import time
 import urllib.error
@@ -21,6 +23,56 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
         raise RuntimeError("评估接口返回重定向，已停止。")
 
 
+def compare_results(cases, analyses):
+    """Separate displayed decisions, raw choices and deliberate abstention.
+
+    Older v1 records do not retain low-confidence raw intent/style choices;
+    those are marked unavailable rather than inferred from an abstention.
+    """
+    index = {row["message_id"]: row for row in analyses}
+    labels = {"emotion": {"positive", "negative", "neutral", "mixed", "unknown"},
+        "intent": {"support", "question", "coordination", "sharing", "complaint", "other"},
+        "style": {"playful", "polite", "direct", "unknown"}}
+    def confidence(row, dimension):
+        key = "confidence" if dimension == "emotion" else dimension + "_confidence"
+        value = row.get(key)
+        return float(value) if not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value) and 0 <= value <= 1 else None
+    comparisons = []
+    for case in cases:
+        actual = index.get(case["id"])
+        raw, raw_agreement = {}, {}
+        for dimension in ("emotion", "intent", "style"):
+            label = actual.get("original_" + dimension) if actual else None
+            certainty = confidence(actual, dimension) if actual else None
+            if label is None and actual and certainty is not None and certainty >= .55:
+                label = actual.get(dimension)
+            if not isinstance(label, str) or label not in labels[dimension]:
+                label = None
+            raw[dimension] = label
+            raw_agreement[dimension] = label in case["expected_" + dimension] if label is not None else None
+        comparisons.append({"id": case["id"], "reference": {key: case["expected_" + key] for key in ("emotion", "intent", "style")},
+            "actual": actual, "raw_labels": raw, "raw_agreement": raw_agreement,
+            "agreement": {key: bool(actual and isinstance(actual.get(key), str) and actual.get(key) in labels[key] and actual.get(key) in case["expected_" + key]) for key in ("emotion", "intent", "style")}})
+    metrics = {}
+    for dimension in ("emotion", "intent", "style"):
+        available = [row for row in comparisons if row["actual"] and isinstance(row["actual"].get(dimension), str) and row["actual"].get(dimension) in labels[dimension]]
+        raw_available = [row for row in comparisons if row["raw_agreement"][dimension] is not None]
+        unknown = "other" if dimension == "intent" else "unknown"
+        decisions = [row for row in available if row["actual"].get(dimension) != unknown]
+        agreed = sum(row["agreement"][dimension] for row in comparisons)
+        raw_agreed = sum(row["raw_agreement"][dimension] is True for row in raw_available)
+        known_confidence = [confidence(row["actual"], dimension) for row in available if confidence(row["actual"], dimension) is not None]
+        metrics[dimension] = {"agreed": agreed, "submitted": len(cases), "valid_results": len(available),
+            "agreement_percent": round(agreed * 100 / len(cases), 1) if cases else 0,
+            "raw_agreed": raw_agreed, "raw_available": len(raw_available),
+            "raw_agreement_percent": round(raw_agreed * 100 / len(raw_available), 1) if raw_available else None,
+            "decided": len(decisions), "unknown_or_other": len(available) - len(decisions),
+            "decision_coverage_percent": round(len(decisions) * 100 / len(available), 1) if available else 0,
+            "low_confidence": sum(value < .55 for value in known_confidence), "confidence_unavailable": len(available) - len(known_confidence),
+            "decided_agreement_percent": round(sum(row["agreement"][dimension] for row in decisions) * 100 / len(decisions), 1) if decisions else None}
+    return comparisons, metrics
+
+
 def main():
     for stream in (sys.stdout, sys.stderr):
         if hasattr(stream, "reconfigure"):
@@ -29,6 +81,7 @@ def main():
     parser.add_argument("--url", default="http://127.0.0.1:8765")
     parser.add_argument("--fixture", type=Path, default=Path(__file__).resolve().parents[1] / "tests/fixtures/jev_eval.json")
     parser.add_argument("--limit", type=int, default=36)
+    parser.add_argument("--choice-order", choices=("standard", "reverse"), default="standard")
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     address = urlsplit(args.url)
@@ -52,10 +105,14 @@ def main():
                 detail = "请求失败"
             raise RuntimeError(detail) from None
 
-    if not request("/api/settings")["configured"]:
+    settings = request("/api/settings")
+    if not settings["configured"]:
         print("尚未配置 Jev Key。请在本机设置页填写；此脚本不会读取或保存密钥。")
         return 2
-    fixture = json.loads(args.fixture.read_text(encoding="utf-8"))
+    if args.choice_order != "standard" and not settings.get("choice_order_supported"):
+        raise RuntimeError("当前服务不支持反序实验，请启动更新后的服务。")
+    fixture_bytes = args.fixture.read_bytes()
+    fixture = json.loads(fixture_bytes.decode("utf-8"))
     cases = fixture["cases"][:args.limit]
     messages, target_ids = [], []
     origin = datetime(2026, 10, 1, 9, tzinfo=timezone(timedelta(hours=8)))
@@ -75,7 +132,7 @@ def main():
     preview = request("/api/preview", {"messages": messages, "limit": len(cases), "exclude_ids": excluded})
     if set(row["id"] for row in preview["messages"]) != set(target_ids):
         raise RuntimeError("预览目标与评估集不一致，已停止，未调用 Jev。")
-    task = request("/api/analyze", {"preview_id": preview["preview_id"], "selected_ids": target_ids})
+    task = request("/api/analyze", {"preview_id": preview["preview_id"], "selected_ids": target_ids, "choice_order": args.choice_order})
     print(f"评估 {len(cases)} 条虚构文字，使用本机已配置的账户。", flush=True)
     deadline, completed = time.monotonic() + 1200, -1
     while True:
@@ -88,26 +145,18 @@ def main():
         if time.monotonic() > deadline:
             raise RuntimeError("等待超过 20 分钟，任务可能仍在运行；请在页面查看，勿重复提交。")
         time.sleep(.5)
-    index = {row["message_id"]: row for row in job["analyses"]}
-    comparisons, metrics = [], {}
-    for case in cases:
-        actual = index.get(case["id"])
-        comparisons.append({"id": case["id"], "reference": {key: case["expected_" + key] for key in ("emotion", "intent", "style")},
-            "actual": actual, "agreement": {key: bool(actual and actual.get(key) in case["expected_" + key]) for key in ("emotion", "intent", "style")}})
-    for dimension in ("emotion", "intent", "style"):
-        agreed = sum(row["agreement"][dimension] for row in comparisons)
-        metrics[dimension] = {"agreed": agreed, "submitted": len(cases), "valid_results": len(index),
-            "agreement_percent": round(agreed * 100 / len(cases), 1) if cases else 0}
+    comparisons, metrics = compare_results(cases, job["analyses"])
     report = {"evaluation": "synthetic-reference-agreement", "date_utc": datetime.now(timezone.utc).isoformat(),
-        "fixture": args.fixture.name, "fixture_metadata": fixture.get("metadata", {}),
+        "fixture": args.fixture.name, "fixture_sha256": hashlib.sha256(fixture_bytes).hexdigest(), "fixture_metadata": fixture.get("metadata", {}),
+        "choice_order": args.choice_order, "prompt_version": job.get("prompt_version", settings.get("prompt_version", "chatprint-v1")),
         "models": job["models"], "metrics": metrics, "usage": job["usage"],
         "requests": job.get("requests", 0), "cached_requests": job.get("cached_requests", 0),
         "errors": job["errors"], "elapsed_seconds": job.get("elapsed_seconds"), "comparisons": comparisons,
-        "limitation": "Small synthetic references with explicitly allowed ambiguous labels; not a production accuracy estimate."}
+        "limitation": "Small synthetic references with explicitly allowed ambiguous labels; not a production accuracy estimate. Displayed agreement includes deliberate abstention. Raw agreement and definitive-decision coverage are separate."}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"models": report["models"], "metrics": metrics, "usage": report["usage"], "errors": len(report["errors"])}, ensure_ascii=False), flush=True)
-    return 0 if len(index) == len(cases) and not job["errors"] else 1
+    return 0 if all(row["actual"] for row in comparisons) and not job["errors"] else 1
 
 
 if __name__ == "__main__":

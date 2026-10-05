@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "wheel": "wechat_style_card-0.1.0-py3-none-any.whl",
+  "isolated_install": true,
+  "installed_prompt_version": "chatprint-v2",
+  "web_assets_match_source": true,
+  "no_api_key_required": true,
+  "installed_server_http": true,
+  "saved_real_responses_replayed_offline": true,
+  "three_dimension_manual_report_counts": true
+}

@@ -7,6 +7,7 @@
   const emotions = {positive:"正面",neutral:"中性",negative:"负面",mixed:"混合",unknown:"无法判断"};
   const intents = {support:"鼓励与感谢",question:"提问",coordination:"协调安排",sharing:"分享",complaint:"抱怨",other:"其他或不明确"};
   const styles = {playful:"轻松幽默",polite:"礼貌",direct:"直接",unknown:"无法判断"};
+  const dimensionNames={emotion:"情绪",intent:"表达意图",style:"文字风格"};
   const emotionColors = {positive:"#288664",neutral:"#8d9eac",negative:"#c45f4c",mixed:"#b79955",unknown:"#c8d0ce"};
   const state = {messages:[],analyses:[],summary:null,source:"",sourceKind:"",selectedPerson:null,settings:{configured:false},warnings:[],job:null,preview:[],previewId:null,previewSelected:new Set(),summaryRequest:0,datasetVersion:0,drawerLimit:100,drawerOrigin:null};
   let toastTimer, previewRequest=0, jobTimer;
@@ -57,11 +58,77 @@
   function testModel(model) {return /test.double|fixture|mock/i.test(model||"");}
   function analysisSource(a) {
     if(!a)return "可人工标注";
-    if(a.source==="manual")return "人工修正";
+    if(a.source==="manual")return `人工修正：${manualDimensions(a).map(d=>dimensionNames[d]).join("、")}`;
     if(["demo","demo_annotation","example","manual_demo"].includes(a.source))return "示例标注";
     if(testModel(a.model))return "测试替身响应";
     if(a.source==="import")return "导入标注";
     return "Jev 判断";
+  }
+  function reviewDimensions(a) {
+    if(!a)return [];
+    const keys=["emotion","intent","style"],raw=a.review_dimensions;
+    if(Array.isArray(raw))return keys.filter(key=>raw.includes(key));
+    if(raw&&typeof raw==="object")return keys.filter(key=>raw[key]===true);
+    const selected=[];
+    if(a.emotion==="unknown"||a.sentiment==="unknown"||a.needs_review===true)selected.push("emotion");
+    [["emotion","confidence",a.emotion??a.sentiment],["intent","intent_confidence",a.intent],["style","style_confidence",a.style]].forEach(([key,field,label])=>{const v=a[field];if(label!=null&&typeof v==="number"&&Number.isFinite(v)&&v>=0&&v<.55&&!selected.includes(key))selected.push(key);});
+    if(a.style==="unknown"&&!selected.includes("style"))selected.push("style");
+    return selected;
+  }
+  function originalLabel(a, key, current) {return Object.prototype.hasOwnProperty.call(a,key)?a[key]:current;}
+  function manualDimensions(a) {return Array.isArray(a?.manual_dimensions)?["emotion","intent","style"].filter(d=>a.manual_dimensions.includes(d)):a?.source==="manual"?["emotion"]:[];}
+  function dimensionValue(a,d) {return d==="emotion"?a?.emotion??a?.sentiment??null:a?.[d]??null;}
+  function initialReviewDimensions(a) {
+    if(Array.isArray(a?.manual_original_review_dimensions))return ["emotion","intent","style"].filter(d=>a.manual_original_review_dimensions.includes(d));
+    const original=reviewDimensions(a);
+    manualDimensions(a).forEach(d=>{const before=a[`manual_original_${d}`]??(d==="emotion"?a.pre_manual_emotion:undefined)??a[`original_${d}`],score=a[d==="emotion"?"confidence":`${d}_confidence`];if((before==="unknown"||typeof score==="number"&&score>=0&&score<.55)&&!original.includes(d))original.push(d);});
+    return ["emotion","intent","style"].filter(d=>original.includes(d));
+  }
+  async function correctDimension(messageId,d,value,reset=false) {
+    const previous=state.analyses.find(a=>String(a.message_id)===String(messageId));
+    const update={...previous,message_id:messageId},manual=new Set(manualDimensions(previous)),originalReview=initialReviewDimensions(previous);
+    if(!Object.prototype.hasOwnProperty.call(update,"original_source"))update.original_source=previous?.source==="manual"?(previous?.model?"jev":"import"):previous?.source||(previous?"import":null);
+    if(!Object.prototype.hasOwnProperty.call(update,"manual_original_review_dimensions"))update.manual_original_review_dimensions=originalReview;
+    if(reset){
+      if(!manual.has(d))return;
+      const field=`manual_original_${d}`;value=Object.prototype.hasOwnProperty.call(update,field)?update[field]:d==="emotion"?update.pre_manual_emotion??update.original_emotion:update[`original_${d}`];manual.delete(d);
+    } else {
+      if(!value)return;
+      if(!Object.prototype.hasOwnProperty.call(update,`manual_original_${d}`))update[`manual_original_${d}`]=dimensionValue(previous,d);
+      if(d==="emotion"&&!Object.prototype.hasOwnProperty.call(update,"pre_manual_emotion"))update.pre_manual_emotion=dimensionValue(previous,d);
+      manual.add(d);
+    }
+    if(d==="emotion"){
+      if(value===undefined||value===null){delete update.emotion;delete update.sentiment;delete update.label;}
+      else {update.emotion=value;update.sentiment=value;}
+    } else {if(value===undefined||value===null)delete update[d];else update[d]=value;}
+    update.manual_dimensions=["emotion","intent","style"].filter(key=>manual.has(key));update.review_dimensions=originalReview.filter(key=>!manual.has(key));update.needs_review=update.review_dimensions.length>0;update.source=manual.size?"manual":update.original_source;
+    state.analyses=state.analyses.filter(a=>String(a.message_id)!==String(messageId));if(manual.size||update.original_source!==null)state.analyses.push(update);
+    await refreshSummary();renderEvidence();[...$("evidence-list").querySelectorAll("select")].find(s=>s.dataset.messageId===String(messageId)&&s.dataset.dimension===d)?.focus();toast(reset?`已还原${dimensionNames[d]}的修正前统计值。`:`已修正${dimensionNames[d]}；其他维度保持当前判断。`);
+  }
+  function appendModelReview(item,a) {
+    if(!a)return;
+    const dimensions=reviewDimensions(a),manual=manualDimensions(a);
+    if(dimensions.length)item.append(node("p","review-note",`建议复核：${dimensions.map(d=>dimensionNames[d]).join("、")}。`));
+    if(manual.length){const remaining=["emotion","intent","style"].filter(d=>!manual.includes(d)&&dimensionValue(a,d)!==null);item.append(node("p","manual-note",`${manual.map(d=>dimensionNames[d]).join("、")}已人工修正${remaining.length?`；${remaining.map(d=>dimensionNames[d]).join("、")}${testModel(a.model)?"仍是测试替身响应":"仍为模型判断"}`:"；原始标签保留供对照"}。`));}
+    const configs=[["emotion","情绪",emotions,"original_emotion",a.emotion??a.sentiment,"confidence","probabilities"],["intent","表达意图",intents,"original_intent",a.intent,"intent_confidence","intent_probabilities"],["style","文字风格",styles,"original_style",a.style,"style_confidence","style_probabilities"]];
+    const originals=node("div","original-labels");let originalCount=0;
+    configs.forEach(([key,title,labels,field,current,confidenceField])=>{
+      const hasOriginal=Object.prototype.hasOwnProperty.call(a,field),original=hasOriginal?a[field]:Object.prototype.hasOwnProperty.call(a,`manual_original_${key}`)?a[`manual_original_${key}`]:current;if(original===undefined||original===null)return;
+      const different=original!==current,score=a[confidenceField],low=typeof score==="number"&&Number.isFinite(score)&&score>=0&&score<.55;
+      const suffix=different&&!manual.includes(key)&&low?`；区分度较低，当前统计为${labels[current]||"无法判断"}`:different?`；当前统计为${labels[current]||"未分析"}`:"";
+      originals.append(node("p","manual-note",`${hasOriginal?"原始":"既有"}${title}标签：${labels[original]||String(original)}${suffix}`));originalCount++;
+    });
+    if(originalCount)item.append(originals);
+    const available=configs.filter(([, , , , ,confidenceField,probabilityField])=>typeof a[confidenceField]==="number"||a[probabilityField]&&Object.keys(a[probabilityField]).length);
+    if(available.length){
+      const detail=node("details","model-distribution");detail.append(node("summary","","查看模型选项分布（仅作参考）"),node("p","helper","这些数值反映模型在给定选项间的倾向；区分度不是准确率，也不是判断正确的概率。人工修正不会改变原始模型分布。"));
+      available.forEach(([,title,labels,,,confidenceField,probabilityField])=>{
+        const row=node("div","distribution-row"),score=a[confidenceField],valid=typeof score==="number"&&Number.isFinite(score)&&score>=0&&score<=1;row.append(node("strong","",title+(valid?` · 区分度 ${score.toFixed(2)}`:"")));
+        const raw=a[probabilityField];if(raw&&typeof raw==="object")Object.entries(raw).filter(([,v])=>typeof v==="number"&&Number.isFinite(v)&&v>=0&&v<=1).sort((a,b)=>b[1]-a[1]).forEach(([key,value])=>row.append(node("span","",`${labels[key]||key} ${percent(value*100)}`)));
+        detail.append(row);
+      });item.append(detail);
+    }
   }
   function showDialog(id) {const dialog=$(id);if(!dialog.open) dialog.showModal();}
   function closeDialog(id) {$(id).close();}
@@ -270,7 +337,17 @@
   }
   function mergeAnalyses(analyses) {
     const map=new Map(state.analyses.map(a=>[String(a.message_id),a]));
-    analyses.forEach(a=>{const old=map.get(String(a.message_id));if(old?.source!=="manual") map.set(String(a.message_id),{...a,emotion:a.emotion||a.sentiment,source:a.source||"jev"});});state.analyses=[...map.values()];
+    analyses.forEach(a=>{
+      const id=String(a.message_id),old=map.get(id),incoming={...a,emotion:a.emotion||a.sentiment,source:a.source||"jev"},manual=manualDimensions(old);
+      if(!manual.length){map.set(id,incoming);return;}
+      const merged={...incoming,source:"manual",original_source:incoming.source,manual_dimensions:manual};
+      manual.forEach(d=>{
+        const fields=d==="emotion"?["emotion","sentiment","original_emotion","confidence","probabilities","manual_original_emotion","pre_manual_emotion"]:[d,`original_${d}`,`${d}_confidence`,`${d}_probabilities`,`manual_original_${d}`,`pre_manual_${d}`];
+        fields.forEach(field=>{if(Object.prototype.hasOwnProperty.call(old,field))merged[field]=old[field];else delete merged[field];});
+      });
+      const freshReview=reviewDimensions(incoming),oldReview=initialReviewDimensions(old),baseline=["emotion","intent","style"].filter(d=>manual.includes(d)?oldReview.includes(d):freshReview.includes(d));
+      merged.manual_original_review_dimensions=baseline;merged.review_dimensions=baseline.filter(d=>!manual.includes(d));merged.needs_review=merged.review_dimensions.length>0;map.set(id,merged);
+    });state.analyses=[...map.values()];
   }
   async function pollJob() {
     const job=state.job;if(!job||job.version!==state.datasetVersion)return;
@@ -298,19 +375,22 @@
   function closeEvidence() {$("drawer-backdrop").hidden=true;$("evidence-drawer").hidden=true;document.body.style.overflow="";state.drawerOrigin?.focus();}
   function renderEvidence() {
     const id=$("evidence-drawer").dataset.personId,messages=filteredMessages().filter(m=>String(m.sender_id)===id),analyses=new Map(state.analyses.map(a=>[String(a.message_id),a]));
-    $("evidence-description").textContent=`当前范围共 ${number(messages.length)} 条消息。修改情绪后，风格卡会立即重新统计；修正只保留在本次页面中。`;
+    $("evidence-description").textContent=`当前范围共 ${number(messages.length)} 条消息。三个维度可独立修正；“还原”恢复该维修正前的统计值和复核标记。修正只保留在本次页面中。`;
     const list=$("evidence-list");list.replaceChildren();
-    messages.slice(0,state.drawerLimit).forEach(m=>{
+    messages.slice(0,state.drawerLimit).forEach((m,index)=>{
       const item=node("article","evidence-item"),meta=node("div","evidence-meta");meta.append(node("span","",formatTime(m.timestamp)),node("span","message-type",types[m.type]||"其他"));item.append(meta,node("p","",m.text||`[${types[m.type]||"其他"}消息 · 仅统计形式]`));
       if(m.type==="text") {
-        const a=analyses.get(String(m.id)),footer=node("footer"),select=document.createElement("select");select.setAttribute("aria-label","修正此消息的情绪");select.dataset.messageId=String(m.id);
-        if(!a) select.add(new Option("未分析",""));Object.entries(emotions).forEach(([value,label])=>select.add(new Option(label,value)));select.value=a?.emotion||"";
-        const source=analysisSource(a);
-        footer.append(node("span","",source),select);item.append(footer);
-        if(a?.intent||a?.style){const semantic=node("p","manual-note",`意图：${intents[a.intent]||"尚未分析"} · 风格：${styles[a.style]||"尚未分析"}${a.needs_review?" · 建议复核":""}`);item.append(semantic);}
-        if(a?.source==="manual")item.append(node("p","manual-note",`原判断：${emotions[a.original_emotion]||"未分析"}`));
-        else if(a?.reason)item.append(node("p","manual-note",a.reason));
-        select.addEventListener("change",async()=>{if(!select.value)return;const previous=state.analyses.find(x=>String(x.message_id)===String(m.id)),original=previous&&Object.prototype.hasOwnProperty.call(previous,"original_emotion")?previous.original_emotion:previous?.emotion??previous?.sentiment??null;const update={...previous,message_id:m.id,emotion:select.value,sentiment:select.value,source:"manual",original_emotion:original};state.analyses=state.analyses.filter(x=>String(x.message_id)!==String(m.id));state.analyses.push(update);await refreshSummary();renderEvidence();[...$("evidence-list").querySelectorAll("select")].find(s=>s.dataset.messageId===String(m.id))?.focus();toast("已按人工修正重新统计。");});
+        const a=analyses.get(String(m.id)),footer=node("footer"),manual=manualDimensions(a);footer.append(node("span","",analysisSource(a)));item.append(footer);
+        const controls=node("div","correction-controls");
+        [["emotion",emotions],["intent",intents],["style",styles]].forEach(([d,labels])=>{
+          const row=node("div","correction-row"),label=node("label","",dimensionNames[d]),select=document.createElement("select"),current=dimensionValue(a,d);select.id=`correction-${index}-${d}`;label.htmlFor=select.id;select.setAttribute("aria-label",`修正此消息的${dimensionNames[d]}`);select.dataset.messageId=String(m.id);select.dataset.dimension=d;
+          if(current===null)select.add(new Option("未分析",""));Object.entries(labels).forEach(([value,title])=>select.add(new Option(title,value)));select.value=current||"";
+          const reset=node("button","text-button correction-reset","还原");reset.disabled=!manual.includes(d);reset.title="还原该维修正前的统计值";reset.dataset.dimension=d;reset.dataset.messageId=String(m.id);reset.setAttribute("aria-label",`还原此消息的${dimensionNames[d]}判断`);
+          const source=manual.includes(d)?"人工":!a||current===null?"未分析":["demo","demo_annotation","example","manual_demo"].includes(a.original_source||a.source)?"示例":testModel(a.model)?"测试替身":a.source==="import"||a.original_source==="import"?"导入":"模型";
+          row.append(label,select,node("small","dimension-source",source),reset);select.addEventListener("change",()=>correctDimension(m.id,d,select.value));reset.addEventListener("click",()=>correctDimension(m.id,d,null,true));controls.append(row);
+        });item.append(controls);
+        if(manual.length){const previousText=manual.map(d=>{const labels=d==="emotion"?emotions:d==="intent"?intents:styles,value=Object.prototype.hasOwnProperty.call(a,`manual_original_${d}`)?a[`manual_original_${d}`]:d==="emotion"?a.pre_manual_emotion??a.original_emotion:a[`original_${d}`];return `${dimensionNames[d]}修正前：${labels[value]||"未分析"}`;}).join("；");item.append(node("p","manual-note",previousText));}
+        else if(a?.reason)item.append(node("p","manual-note",a.reason));appendModelReview(item,a);
       }list.append(item);
     });
     if(messages.length>state.drawerLimit){const more=node("button","button full secondary",`再显示 100 条（还有 ${number(messages.length-state.drawerLimit)} 条）`);more.addEventListener("click",()=>{state.drawerLimit+=100;renderEvidence();});list.append(more);}
