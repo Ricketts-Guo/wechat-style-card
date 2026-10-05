@@ -377,6 +377,24 @@ class JobTests(unittest.TestCase):
 
 
 class CommandBoundaryTests(unittest.TestCase):
+    def test_doctor_json_can_be_captured_by_non_utf8_windows_stdout(self):
+        from chatprint.__main__ import main
+        output_bytes = io.BytesIO()
+        captured_stdout = io.TextIOWrapper(output_bytes, encoding="cp1252", errors="strict", write_through=True)
+        capability = {"available": False, "command": None, "python_adapter_available": False,
+                      "sessions_available": False, "warnings": ["未检测到微信工具，可以导入虚构示例。"]}
+        try:
+            with mock.patch.object(sys, "argv", ["chatprint", "doctor"]), mock.patch.object(sys, "stdout", captured_stdout), mock.patch.object(sys, "stderr", io.StringIO()), mock.patch.object(server.wechat, "cli_status", return_value=capability), mock.patch.dict(os.environ, {"TYPESAFE_API_KEY": ""}):
+                exit_code = main()
+            captured_stdout.flush()
+            payload = output_bytes.getvalue().decode("utf-8")
+        finally:
+            captured_stdout.detach()
+        self.assertEqual(exit_code, 0)
+        parsed = json.loads(payload)
+        self.assertEqual(parsed["wechat"]["warnings"], capability["warnings"])
+        self.assertFalse(parsed["jev_key_configured"])
+
     def test_adapter_only_capability_distinguishes_session_listing(self):
         with mock.patch.object(server.wechat.shutil, "which", return_value=None), mock.patch.object(server.wechat.importlib.metadata, "version", return_value="0.2.4"), mock.patch.object(server.wechat, "_read") as reading:
             capability = server.wechat.cli_status()
@@ -433,6 +451,30 @@ class CommandBoundaryTests(unittest.TestCase):
 
 
 class EvaluationToolTests(unittest.TestCase):
+    def test_unconfigured_evaluation_message_survives_windows_pipe_encoding(self):
+        script = Path(__file__).resolve().parents[1] / "tools" / "evaluate.py"
+        spec = importlib.util.spec_from_file_location("chatprint_synthetic_eval_encoding_test", script)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        output_bytes = io.BytesIO()
+        captured_stdout = io.TextIOWrapper(output_bytes, encoding="cp1252", errors="strict", write_through=True)
+        opener = mock.Mock()
+        opener.open.return_value = io.BytesIO(b'{"configured": false}')
+        try:
+            with tempfile.TemporaryDirectory() as folder:
+                output = Path(folder) / "not-created.json"
+                args = ["evaluate.py", "--output", str(output)]
+                with mock.patch.object(sys, "argv", args), mock.patch.object(sys, "stdout", captured_stdout), mock.patch.object(sys, "stderr", io.StringIO()), mock.patch.object(module.urllib.request, "build_opener", return_value=opener):
+                    exit_code = module.main()
+                captured_stdout.flush()
+                text = output_bytes.getvalue().decode("utf-8")
+                self.assertEqual(exit_code, 2)
+                self.assertIn("尚未配置 Jev Key", text)
+                self.assertFalse(output.exists())
+                self.assertEqual(opener.open.call_count, 1)
+        finally:
+            captured_stdout.detach()
+
     def test_evaluation_redirect_stops_before_leaving_loopback(self):
         script = Path(__file__).resolve().parents[1] / "tools" / "evaluate.py"
         spec = importlib.util.spec_from_file_location("chatprint_synthetic_eval_test", script)

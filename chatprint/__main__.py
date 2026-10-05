@@ -9,6 +9,10 @@ from .jev import JevError
 
 
 def main():
+    # Windows pipes can default to a legacy code page even for Chinese output.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="backslashreplace")
     p = argparse.ArgumentParser(description="Chatprint · 微信聊天风格卡")
     sub = p.add_subparsers(dest="command")
     web = sub.add_parser("serve", help="启动本机网页")
